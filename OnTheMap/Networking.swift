@@ -21,18 +21,73 @@ class Networking {
 // task functions
 extension Networking {
     
-    func taskWithParams(_ params:[String:AnyObject], completion:([String:AnyObject]?, NetworkErrors?) -> [String:AnyObject]?) {
+    func taskWithParams(_ params:[String:AnyObject], completion:@escaping ([String:AnyObject]?, NetworkErrors?) -> [String:AnyObject]?) {
         
-        print("params")
-        print(params)
+        // retrieve url
+        guard let url = urlForParams(params) else {
+            let _ = completion(nil, NetworkErrors.operatorError("Unable to create valid URL."))
+            return
+        }
         
-        if let url = urlForParams(params) {
-            print(url.absoluteString)
+        // create/build request
+        var request = URLRequest(url: url)
+        
+        if let method = params[Networking.ParamKeys.httpMethod] as? String {
+            request.httpMethod = method
         }
-        else {
-            print("unable to create url")
+        
+        if let httpHeaderField = params[Networking.ParamKeys.httpHeaderField] as? [String:AnyObject] {
+            for (key, value) in httpHeaderField {
+                request.addValue(value as! String, forHTTPHeaderField: key)
+            }
         }
-        let _ = completion(nil, nil)
+        
+        if let body = params[Networking.ParamKeys.httpBody] {
+            do {
+                let postData = try JSONSerialization.data(withJSONObject: body)
+                request.httpBody = postData
+            }
+            catch {
+                let _ = completion(nil, NetworkErrors.operatorError("Unable to create valid URL."))
+                return
+            }
+        }
+        
+        let task = URLSession.shared.dataTask(with: request) {
+            (data, response, error) in
+            
+            guard error == nil else {
+                let _ = completion(nil, NetworkErrors.networkError("Error if data task."))
+                return
+            }
+            
+            guard let statusCode = (response as? HTTPURLResponse)?.statusCode,
+                statusCode >= 200, statusCode <= 299 else {
+                    let _ = completion(nil, NetworkErrors.networkError("Bad status code returned. non-2xx"))
+                    return
+            }
+            
+            guard var data = data else {
+                let _ = completion(nil, NetworkErrors.networkError("No data returned from data task."))
+                return
+            }
+            
+            let range = Range(5..<data.count)
+            data = data.subdata(in: range)
+            
+            let json:[String:AnyObject]!
+            do {
+                json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String:AnyObject]
+            }
+            catch {
+                let _ = completion(nil, NetworkErrors.networkError("Unable to convert data."))
+                return
+            }
+            
+            let _ = completion(json, nil)
+        }
+        
+        task .resume()
     }
     
     func urlForParams(_ params:[String:AnyObject]) -> URL? {
@@ -43,6 +98,8 @@ extension Networking {
         // remove extensions, httpBody, and apiComponents
         let extensions = params.removeValue(forKey: Networking.ParamKeys.pathExtension) as? String
         let _ = params.removeValue(forKey: Networking.ParamKeys.httpBody) // not needed for URL creation
+        let _ = params.removeValue(forKey: Networking.ParamKeys.httpHeaderField) // not needed
+        let _ = params.removeValue(forKey: Networking.ParamKeys.httpMethod) // not needed
         guard let apiComponents = params.removeValue(forKey: Networking.ParamKeys.components) else {
             // !! apiComponents are required !!
             return nil
@@ -72,6 +129,8 @@ extension Networking {
         static let host = "host"
         static let scheme = "scheme"
         static let path = "path"
+        static let httpHeaderField = "httpHeaderField"
+        static let httpMethod = "httpMethod"
     }
 }
 
