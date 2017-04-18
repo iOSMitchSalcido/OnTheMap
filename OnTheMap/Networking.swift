@@ -48,6 +48,8 @@ extension Networking {
             return nil
         }
         
+        //.. params now only contains queryItems
+        
         var components = URLComponents()
         components.host = (apiComponents[Networking.ParamKeys.host] as! String)
         components.scheme = (apiComponents[Networking.ParamKeys.scheme] as! String)

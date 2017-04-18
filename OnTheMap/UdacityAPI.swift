@@ -16,7 +16,7 @@ extension UdacityAPI {
     
     static func postSessionForUser(_ user:String, password:String, completion:([String:AnyObject]?, NetworkErrors?) -> [String:AnyObject]?) {
         
-        // httpBody
+        // httpBody for post method
         let httpBody = ["udacity": ["username": user, "password": password]]
         
         // create components
