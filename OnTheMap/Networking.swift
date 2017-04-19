@@ -21,70 +21,88 @@ class Networking {
 // task functions
 extension Networking {
     
-    func taskWithParams(_ params:[String:AnyObject], completion:@escaping ([String:AnyObject]?, NetworkErrors?) -> [String:AnyObject]?) {
+    func taskWithParams(_ params:[String:AnyObject], completion:@escaping ([String:AnyObject]?, NetworkErrors?) -> Void) {
         
         // retrieve url
         guard let url = urlForParams(params) else {
-            let _ = completion(nil, NetworkErrors.operatorError("Unable to create valid URL."))
+            completion(nil, NetworkErrors.operatorError("Unable to create valid URL."))
             return
         }
         
         // create/build request
         var request = URLRequest(url: url)
         
+        // HTTP MEthod
         if let method = params[Networking.ParamKeys.httpMethod] as? String {
             request.httpMethod = method
         }
         
+        // HTTP Header Field(s)
         if let httpHeaderField = params[Networking.ParamKeys.httpHeaderField] as? [String:AnyObject] {
             for (key, value) in httpHeaderField {
                 request.addValue(value as! String, forHTTPHeaderField: key)
             }
         }
         
+        // HTTPBody
         if let body = params[Networking.ParamKeys.httpBody] {
             do {
                 let postData = try JSONSerialization.data(withJSONObject: body)
                 request.httpBody = postData
             }
             catch {
-                let _ = completion(nil, NetworkErrors.operatorError("Unable to create valid URL."))
+                completion(nil, NetworkErrors.operatorError("Unable to create valid URL."))
                 return
             }
         }
         
+        // create data task
         let task = URLSession.shared.dataTask(with: request) {
             (data, response, error) in
             
+            // test error
             guard error == nil else {
-                let _ = completion(nil, NetworkErrors.networkError("Error if data task."))
+                completion(nil, NetworkErrors.networkError("Error if data task."))
                 return
             }
             
+            // test status code
             guard let statusCode = (response as? HTTPURLResponse)?.statusCode,
                 statusCode >= 200, statusCode <= 299 else {
-                    let _ = completion(nil, NetworkErrors.networkError("Bad status code returned. non-2xx"))
+                    completion(nil, NetworkErrors.networkError("Bad status code returned. non-2xx"))
                     return
             }
             
+            // test valid data
             guard var data = data else {
-                let _ = completion(nil, NetworkErrors.networkError("No data returned from data task."))
+                completion(nil, NetworkErrors.networkError("No data returned from data task."))
                 return
             }
             
-            let range = Range(5..<data.count)
-            data = data.subdata(in: range)
-            
+            /*
+             convert to JSON
+             Perform in two try's. First try tests for JSON using data. If error thrown, then try again, only remove
+             first five characters per Udacity API spec...might be Udacity data
+            */
             let json:[String:AnyObject]!
             do {
+                // first pass test
                 json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String:AnyObject]
             }
             catch {
-                let _ = completion(nil, NetworkErrors.networkError("Unable to convert data."))
-                return
+                // failed first pass
+                do {
+                    // try again, but remove first five characters per Udacity API spec
+                    let range = Range(5..<data.count)
+                    data = data.subdata(in: range)
+                    json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String:AnyObject]
+                }
+                catch {
+                    completion(nil, NetworkErrors.networkError("Unable to convert data."))
+                    return
+                }
             }
-            
-            let _ = completion(json, nil)
+            completion(json, nil)
         }
         
         task .resume()
@@ -111,7 +129,7 @@ extension Networking {
         components.host = (apiComponents[Networking.ParamKeys.host] as! String)
         components.scheme = (apiComponents[Networking.ParamKeys.scheme] as! String)
         components.path = (apiComponents[Networking.ParamKeys.path] as! String) + (extensions ?? "")
-        
+        // TODO: Add items !!!
         return components.url
     }
 }

@@ -17,7 +17,7 @@ class UdacityAPI {
 
 extension UdacityAPI {
     
-    func postSessionForUser(_ user:String, password:String, completion:@escaping ([String:AnyObject]?, NetworkErrors?) -> [String:AnyObject]?) {
+    func postSessionForUser(_ user:String, password:String, completion:@escaping ([String:AnyObject]?, NetworkErrors?) -> Void) {
         
         // HTTPHeaderFields
         let httpHeaderFields = ["Accept": "application/json", "Content-Type": "application/json"]
@@ -41,7 +41,7 @@ extension UdacityAPI {
         networking.taskWithParams(parameters as [String : AnyObject], completion: completion)
     }
 
-    func getPublicUserData(userID: String, completion:@escaping ([String:AnyObject]?, NetworkErrors?) -> [String:AnyObject]?) {
+    func getPublicUserData(userID: String, completion:@escaping ([String:AnyObject]?, NetworkErrors?) -> Void) {
         
         // create components
         let components = [Networking.ParamKeys.host: Subcomponents.host,
