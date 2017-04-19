@@ -17,7 +17,12 @@ class UdacityAPI {
 
 extension UdacityAPI {
     
+    // post session
     func postSessionForUser(_ user:String, password:String, completion:@escaping ([String:AnyObject]?, NetworkErrors?) -> Void) {
+        
+        /*
+         POST a session to get a sessionID, required for authentication of Udacity API requests
+         */
         
         // HTTPHeaderFields
         let httpHeaderFields = ["Accept": "application/json", "Content-Type": "application/json"]
@@ -25,36 +30,38 @@ extension UdacityAPI {
         // httpBody for post method
         let httpBody = ["udacity": ["username": user, "password": password]]
         
-        // create components
-        let components = [Networking.ParamKeys.host: Subcomponents.host,
-                          Networking.ParamKeys.path: Subcomponents.path,
-                          Networking.ParamKeys.scheme: Subcomponents.scheme] as [String:AnyObject]
+        // create subcomponents
+        let subcomponents = [Networking.ParamKeys.host: Subcomponents.host,
+                             Networking.ParamKeys.path: Subcomponents.path,
+                             Networking.ParamKeys.scheme: Subcomponents.scheme] as [String:AnyObject]
         
-        // place in dictionary...note no query items included
+        // place in dictionary
         let parameters = [Networking.ParamKeys.httpHeaderField: httpHeaderFields,
                           Networking.ParamKeys.httpMethod: "POST",
                           Networking.ParamKeys.httpBody: httpBody,
-                          Networking.ParamKeys.components: components,
+                          Networking.ParamKeys.components: subcomponents,
                           Networking.ParamKeys.pathExtension: Paths.postSession] as [String:AnyObject]
         
+        // create networking object, run task using params...pass completion along
         let networking = Networking()
         networking.taskWithParams(parameters as [String : AnyObject], completion: completion)
     }
-
+    
     func getPublicUserData(userID: String, completion:@escaping ([String:AnyObject]?, NetworkErrors?) -> Void) {
         
-        // create components
-        let components = [Networking.ParamKeys.host: Subcomponents.host,
-                          Networking.ParamKeys.path: Subcomponents.path,
-                          Networking.ParamKeys.scheme: Subcomponents.scheme]
+        // create subcomponents
+        let subcomponents = [Networking.ParamKeys.host: Subcomponents.host,
+                             Networking.ParamKeys.path: Subcomponents.path,
+                             Networking.ParamKeys.scheme: Subcomponents.scheme]
         
         // path extension
         let pathExtension = Paths.getPublicUserData + "/" + userID
         
         // place in dictionary...note no query items included
-        let parameters = [Networking.ParamKeys.components: components,
+        let parameters = [Networking.ParamKeys.components: subcomponents,
                           Networking.ParamKeys.pathExtension: pathExtension] as [String:AnyObject]
         
+        // create networking object, run task using params...pass completion along
         let networking = Networking()
         networking.taskWithParams(parameters, completion: completion)
     }

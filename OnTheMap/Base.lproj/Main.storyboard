@@ -79,16 +79,25 @@
                                     <constraint firstItem="rFT-Tf-OIt" firstAttribute="height" secondItem="5sn-kx-OAb" secondAttribute="height" id="mnA-RJ-2St"/>
                                 </constraints>
                             </stackView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="Dc4-ky-d0O">
+                                <rect key="frame" x="142" y="266" width="37" height="37"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="0.40000000600000002" green="1" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
+                            <constraint firstItem="Dc4-ky-d0O" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="0hX-dY-66E"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="swX-kt-BO8" secondAttribute="bottom" id="6Gz-Mo-iHy"/>
+                            <constraint firstItem="Dc4-ky-d0O" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="et7-k1-1Zy"/>
                             <constraint firstAttribute="trailingMargin" secondItem="swX-kt-BO8" secondAttribute="trailing" id="f9S-cE-h1J"/>
                             <constraint firstItem="swX-kt-BO8" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="kAr-Oz-XNK"/>
                             <constraint firstItem="swX-kt-BO8" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="lFC-6u-ajU"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Tj9-Iy-078"/>
+                    <connections>
+                        <outlet property="activityViewIndicator" destination="Dc4-ky-d0O" id="mNx-a5-vuw"/>
+                        <outlet property="stackView" destination="swX-kt-BO8" id="NyH-fh-yvv"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
