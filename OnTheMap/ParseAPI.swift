@@ -13,6 +13,9 @@ class ParseAPI {
     // singleton
     static let shared = ParseAPI()
     private init() {}
+    
+    // store students
+    var students:[[String:AnyObject]]?
 }
 
 extension ParseAPI {
@@ -38,6 +41,11 @@ extension ParseAPI {
         let networking = Networking()
         networking.taskWithParams(parameters as [String : AnyObject], completion: completion)
     }
+}
+
+extension ParseAPI {
+
+
 }
 
 // constants

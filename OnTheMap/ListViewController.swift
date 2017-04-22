@@ -9,8 +9,6 @@
 import UIKit
 
 class ListViewController: UIViewController {
-
-    let testData = ["Dog", "Cat", "Horse", "Elephant"]
     
     @IBOutlet weak var logoutBbi: UIBarButtonItem!
     @IBOutlet weak var tableView: UITableView!
@@ -20,24 +18,30 @@ class ListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
     }
+    
     @IBAction func logoutBbiPressed(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
+    
     @IBAction func dropPinBbiPressed(_ sender: Any) {
     }
-    @IBOutlet weak var refreshBbiPressed: UIBarButtonItem!
+    
+    @IBAction func refreshBbiPressed(_ sender: Any) {    
+    }
 }
 
 extension ListViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return testData.count
+        
+        return StudentsOnTheMap.shared.udations.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ListCellID", for: indexPath)
         
-        cell.textLabel?.text = testData[indexPath.row]
+        let student = StudentsOnTheMap.shared.udations[indexPath.row]
+        cell.textLabel?.text = student.firstName + " " + student.lastName
         return cell
     }
 }

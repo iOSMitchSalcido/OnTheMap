@@ -18,11 +18,11 @@ class MapViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        updateMap()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
+    func updateMap() {
         ParseAPI.shared.studentLocations() {
             (params, error) in
             
@@ -40,8 +40,14 @@ class MapViewController: UIViewController {
             }
             
             // test params
-            if let params = params {
-                print(params)
+            if let params = params, let students = params["results"] as? [[String:AnyObject]] {
+                StudentsOnTheMap.shared.newCohort(students)
+                
+                for student in StudentsOnTheMap.shared.udations {
+                    print(" ")
+                    print(" ")
+                    print(student)
+                }
             }
         }
     }
@@ -52,5 +58,6 @@ class MapViewController: UIViewController {
     @IBAction func dropPinBbiPressed(_ sender: Any) {
     }
     @IBAction func refreshBbiPressed(_ sender: Any) {
+        updateMap()
     }
 }

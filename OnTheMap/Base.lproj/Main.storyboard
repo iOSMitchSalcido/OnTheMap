@@ -282,7 +282,11 @@
                             </connections>
                         </barButtonItem>
                         <rightBarButtonItems>
-                            <barButtonItem systemItem="refresh" id="JM2-ym-zXq"/>
+                            <barButtonItem systemItem="refresh" id="JM2-ym-zXq">
+                                <connections>
+                                    <action selector="refreshBbiPressed:" destination="jBn-Ba-0Yd" id="PCk-ag-Vue"/>
+                                </connections>
+                            </barButtonItem>
                             <barButtonItem image="icon_pin" id="yRT-Cs-N3f">
                                 <connections>
                                     <action selector="dropPinBbiPressed:" destination="jBn-Ba-0Yd" id="qCc-o1-T7X"/>
@@ -294,7 +298,6 @@
                         <outlet property="dropPinBbi" destination="yRT-Cs-N3f" id="GZv-S2-b3b"/>
                         <outlet property="logoutBbi" destination="UCI-Bz-quv" id="M1K-yf-dzS"/>
                         <outlet property="refreshBbi" destination="JM2-ym-zXq" id="Q05-hl-IMx"/>
-                        <outlet property="refreshBbiPressed" destination="JM2-ym-zXq" id="Sgg-Fi-h7a"/>
                         <outlet property="tableView" destination="cC3-RI-tKq" id="cGR-uk-nVW"/>
                     </connections>
                 </viewController>

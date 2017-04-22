@@ -61,11 +61,8 @@ class LoginViewController: UIViewController {
             }
             
             // test params
-            if let params = params {
+            if params != nil {
 
-                if let session = params["session"], let sessionID = session["id"] as? String {
-                    print(sessionID)
-                }
                 DispatchQueue.main.async {
                     let tbc = self.storyboard?.instantiateViewController(withIdentifier: "TabBarControllerID") as! UITabBarController
                     self.present(tbc, animated: true, completion: nil)
