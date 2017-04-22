@@ -13,6 +13,9 @@ class UdacityAPI {
     // singleton
     static let shared = UdacityAPI()
     private init() {}
+    
+    // retrieved when POST session.
+    var uniqueKey: String?
 }
 
 extension UdacityAPI {
@@ -65,6 +68,29 @@ extension UdacityAPI {
         let networking = Networking()
         networking.taskWithParams(parameters, completion: completion)
     }
+    
+    func deleteSession() {
+        let request = NSMutableURLRequest(url: URL(string: "https://www.udacity.com/api/session")!)
+        request.httpMethod = "DELETE"
+        var xsrfCookie: HTTPCookie? = nil
+        let sharedCookieStorage = HTTPCookieStorage.shared
+        for cookie in sharedCookieStorage.cookies! {
+            if cookie.name == "XSRF-TOKEN" { xsrfCookie = cookie }
+        }
+        if let xsrfCookie = xsrfCookie {
+            request.setValue(xsrfCookie.value, forHTTPHeaderField: "X-XSRF-TOKEN")
+        }
+        let session = URLSession.shared
+        let task = session.dataTask(with: request as URLRequest) { data, response, error in
+            if error != nil { // Handle error…
+                return
+            }
+            let range = Range(5..<data!.count)
+            let newData = data?.subdata(in: range) /* subset response data! */
+            print(NSString(data: newData!, encoding: String.Encoding.utf8.rawValue)!)
+        }
+        task.resume()
+    }
 }
 
 // constants
@@ -72,13 +98,18 @@ extension UdacityAPI {
     
     fileprivate struct Subcomponents {
         static let scheme = "https"
-        static let host = "udacity.com"
+        static let host = "www.udacity.com" // need the www, otherwise won't "register" = 1
         static let path = "/api"
     }
     
     fileprivate struct Paths {
         static let postSession = "/session"
-        static let deleteSession = "/session"
         static let getPublicUserData = "/users"
+    }
+    
+    struct Account {
+        static let account = "account"
+        static let key = "key"
+        static let registered = "registered"
     }
 }

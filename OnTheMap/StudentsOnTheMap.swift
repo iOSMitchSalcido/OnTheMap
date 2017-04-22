@@ -14,7 +14,7 @@ class StudentsOnTheMap {
     private init() {}
     
     // cohort of Udacity students who are "On The Map"
-    var udations = [Student]()
+    var udacions = [Student]()
 }
 
 extension StudentsOnTheMap {
@@ -31,7 +31,7 @@ extension StudentsOnTheMap {
         
         // remove duplicate student locations..return array with students and their most
         // recent location
-        udations = cleanupStudents(students)
+        udacions = cleanupStudents(students)
     }
 }
 

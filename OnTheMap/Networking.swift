@@ -62,15 +62,23 @@ extension Networking {
             
             // test error
             guard error == nil else {
-                completion(nil, NetworkErrors.networkError("Error if data task."))
+                completion(nil, NetworkErrors.networkError("Error in data task."))
                 return
             }
             
-            // test status code
-            guard let statusCode = (response as? HTTPURLResponse)?.statusCode,
-                statusCode >= 200, statusCode <= 299 else {
-                    completion(nil, NetworkErrors.networkError("Bad status code returned. non-2xx"))
+            // test error
+            if let statusCode = (response as? HTTPURLResponse)?.statusCode {
+                
+                switch statusCode {
+                case 200...299:
+                    break
+                case 403:
+                    completion(nil, NetworkErrors.operatorError("Invalid credentials. Check username/password"))
                     return
+                default:
+                completion(nil, NetworkErrors.networkError("Bad status code returned. non-2xx"))
+                    return
+                }
             }
             
             // test valid data
@@ -154,26 +162,5 @@ extension Networking {
 
 extension Networking {
     
-    func anyFunc() {
-        let request = NSMutableURLRequest(url: URL(string: "https://www.udacity.com/api/session")!)
-        request.httpMethod = "DELETE"
-        var xsrfCookie: HTTPCookie? = nil
-        let sharedCookieStorage = HTTPCookieStorage.shared
-        for cookie in sharedCookieStorage.cookies! {
-            if cookie.name == "XSRF-TOKEN" { xsrfCookie = cookie }
-        }
-        if let xsrfCookie = xsrfCookie {
-            request.setValue(xsrfCookie.value, forHTTPHeaderField: "X-XSRF-TOKEN")
-        }
-        let session = URLSession.shared
-        let task = session.dataTask(with: request as URLRequest) { data, response, error in
-            if error != nil { // Handle error…
-                return
-            }
-            let range = Range(5..<data!.count)
-            let newData = data?.subdata(in: range) /* subset response data! */
-            print(NSString(data: newData!, encoding: String.Encoding.utf8.rawValue)!)
-        }
-        task.resume()
-    }
+
 }

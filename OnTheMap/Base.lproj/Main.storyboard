@@ -84,6 +84,7 @@
                             </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="0.40000000600000002" green="1" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="Dc4-ky-d0O" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="0hX-dY-66E"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="swX-kt-BO8" secondAttribute="bottom" id="6Gz-Mo-iHy"/>
@@ -92,14 +93,25 @@
                             <constraint firstItem="swX-kt-BO8" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="kAr-Oz-XNK"/>
                             <constraint firstItem="swX-kt-BO8" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="lFC-6u-ajU"/>
                         </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="fig-hD-1bN" appends="YES" id="EbI-gF-zaA"/>
+                        </connections>
                     </view>
                     <navigationItem key="navigationItem" id="Tj9-Iy-078"/>
                     <connections>
                         <outlet property="activityViewIndicator" destination="Dc4-ky-d0O" id="mNx-a5-vuw"/>
+                        <outlet property="loginButton" destination="rFT-Tf-OIt" id="Idj-Y9-KAY"/>
+                        <outlet property="passwordTextField" destination="RUe-z0-aku" id="hSc-2i-K97"/>
                         <outlet property="stackView" destination="swX-kt-BO8" id="NyH-fh-yvv"/>
+                        <outlet property="usernameTextField" destination="5sn-kx-OAb" id="qbc-eU-cIZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="fig-hD-1bN">
+                    <connections>
+                        <action selector="singleTapDetected:" destination="BYZ-38-t0r" id="cEu-uV-zmd"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="525" y="-721.47887323943667"/>
         </scene>

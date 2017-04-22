@@ -34,13 +34,13 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return StudentsOnTheMap.shared.udations.count
+        return StudentsOnTheMap.shared.udacions.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ListCellID", for: indexPath)
         
-        let student = StudentsOnTheMap.shared.udations[indexPath.row]
+        let student = StudentsOnTheMap.shared.udacions[indexPath.row]
         cell.textLabel?.text = student.firstName + " " + student.lastName
         return cell
     }

@@ -42,17 +42,12 @@ class MapViewController: UIViewController {
             // test params
             if let params = params, let students = params["results"] as? [[String:AnyObject]] {
                 StudentsOnTheMap.shared.newCohort(students)
-                
-                for student in StudentsOnTheMap.shared.udations {
-                    print(" ")
-                    print(" ")
-                    print(student)
-                }
             }
         }
     }
     
     @IBAction func logoutBbiPressed(_ sender: Any) {
+        UdacityAPI.shared.deleteSession()
         dismiss(animated: true, completion: nil)
     }
     @IBAction func dropPinBbiPressed(_ sender: Any) {
