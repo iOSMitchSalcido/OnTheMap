@@ -5,6 +5,9 @@
 //  Created by Online Training on 4/16/17.
 //  Copyright © 2017 Mitch Salcido. All rights reserved.
 //
+/*
+ About LoginViewController.swift:
+ */
 
 import UIKit
 
@@ -27,13 +30,13 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // disable loginButton...no valid text yet
-        loginButton.isEnabled = false
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        // loginButton enable
+        loginButton.isEnabled = !(usernameTextField.text?.isEmpty)! && !(passwordTextField.text?.isEmpty)!
         
         // begin keyboard notifications for shifting up view when textField is editing
         startKeyboardNotifications()
@@ -81,7 +84,7 @@ class LoginViewController: UIViewController {
                 // good key/registration. OK to invoke tabVC
                 
                 // set uniqueKey in API
-                UdacityAPI.shared.myUniqueKey = key
+                StudentsOnTheMap.shared.myUniqueKey = key
                 
                 // load tabVC
                 DispatchQueue.main.async {

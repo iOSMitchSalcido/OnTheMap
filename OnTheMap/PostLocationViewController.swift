@@ -5,6 +5,9 @@
 //  Created by Online Training on 4/22/17.
 //  Copyright © 2017 Mitch Salcido. All rights reserved.
 //
+/*
+ About PostLocationViewController.swift:
+ */
 
 import UIKit
 import MapKit
@@ -26,27 +29,9 @@ class PostLocationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        cancelBbi.isEnabled = false
         mapView.isHidden = true
         button.isEnabled = false
-        activityIndicator.isHidden = false
-        activityIndicator.startAnimating()
-        stackView.alpha = 0.3
-        
-        guard  let userID = UdacityAPI.shared.myUniqueKey else {
-            return
-        }
-        
-        UdacityAPI.shared.getPublicUserData(userID: userID) {
-            (params, error) in
-            
-            DispatchQueue.main.async {
-                self.cancelBbi.isEnabled = true
-                self.activityIndicator.isHidden = true
-                self.activityIndicator.stopAnimating()
-                self.stackView.alpha = 1.0
-            }
-        }
+        activityIndicator.isHidden = true
     }
     
     @IBAction func cancelBbiPressed(_ sender: Any) {
@@ -56,59 +41,67 @@ class PostLocationViewController: UIViewController {
     @IBAction func buttonPressed(_ sender: Any) {
         
         if !locationFound {
-            
-            cancelBbi.isEnabled = false
-            button.isEnabled = false
-            activityIndicator.isHidden = false
-            activityIndicator.startAnimating()
-            stackView.alpha = 0.3
-            
-            let geoCoder = CLGeocoder()
-            geoCoder.geocodeAddressString(textField.text!) {
-                (placemark, error) in
-                
-                if error != nil {
-                    print("error geocoding")
-                }
-                
-                if let placemark = placemark?.last {
-                    
-                    let coord = placemark.location?.coordinate
-                    let span = MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
-                    let mapRegion = MKCoordinateRegion(center: coord!, span: span)
-                    
-                    DispatchQueue.main.async {
-                        
-                        self.mapView.isHidden = false
-                        self.mapView.setRegion(mapRegion, animated: true)
-                    }
-                }
-                
-                DispatchQueue.main.async {
-                    
-                    self.cancelBbi.isEnabled = true
-                    self.button.isEnabled = true
-                    self.activityIndicator.isHidden = true
-                    self.activityIndicator.stopAnimating()
-                    self.stackView.alpha = 1.0
-                }
-            }
+            locateOnMap()
+        }
+        else {
+            postLocation()
         }
     }
 }
 
 extension PostLocationViewController {
     
-    func getUserData() {
+    func locateOnMap() {
         
+        cancelBbi.isEnabled = false
+        button.isEnabled = false
+        activityIndicator.isHidden = false
+        activityIndicator.startAnimating()
+        stackView.alpha = 0.3
+        
+        let geoCoder = CLGeocoder()
+        geoCoder.geocodeAddressString(textField.text!) {
+            (placemark, error) in
+            
+            if error != nil {
+                print("error geocoding")
+            }
+            
+            if let placemark = placemark?.last, let coordinate = placemark.location?.coordinate {
+                
+                //let coord = placemark.location?.coordinate
+                let span = MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
+                let mapRegion = MKCoordinateRegion(center: coordinate, span: span)
+                
+                // found a valid location
+                self.locationFound = true
+                
+                // update mapView
+                DispatchQueue.main.async {
+                    self.mapView.isHidden = false
+                    self.mapView.setRegion(mapRegion, animated: true)
+                    self.button.setTitle("Post Location", for: .normal)
+                    self.whereAtLabel.text = "Something Extra..?"
+                    self.textField.text = nil
+                    self.textField.placeholder = "Add URL"
+                }
+            }
+            
+            // restore UI
+            DispatchQueue.main.async {
+                self.cancelBbi.isEnabled = true
+                self.button.isEnabled = true
+                self.activityIndicator.isHidden = true
+                self.activityIndicator.stopAnimating()
+                self.stackView.alpha = 1.0
+            }
+        }
+    }
+    
+    func postLocation() {
         
     }
 }
-
-extension PostLocationViewController: MKMapViewDelegate {
-    
-}
-
 extension PostLocationViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

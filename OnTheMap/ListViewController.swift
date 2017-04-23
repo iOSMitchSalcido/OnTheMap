@@ -5,6 +5,9 @@
 //  Created by Online Training on 4/16/17.
 //  Copyright © 2017 Mitch Salcido. All rights reserved.
 //
+/*
+ About ListViewController.swift:
+ */
 
 import UIKit
 
@@ -38,13 +41,13 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return StudentsOnTheMap.shared.udacions.count
+        return StudentsOnTheMap.shared.udacionCount
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ListCellID", for: indexPath)
         
-        let student = StudentsOnTheMap.shared.udacions[indexPath.row]
+        let student = StudentsOnTheMap.shared.udacionAtIndex(indexPath.row)
         cell.textLabel?.text = student.firstName + " " + student.lastName
         return cell
     }

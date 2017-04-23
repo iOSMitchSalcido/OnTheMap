@@ -5,6 +5,9 @@
 //  Created by Online Training on 4/20/17.
 //  Copyright © 2017 Mitch Salcido. All rights reserved.
 //
+/*
+ About Student.swift:
+ */
 
 import Foundation
 

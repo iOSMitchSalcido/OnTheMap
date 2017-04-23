@@ -5,22 +5,38 @@
 //  Created by Online Training on 4/17/17.
 //  Copyright © 2017 Mitch Salcido. All rights reserved.
 //
+/*
+ About Networking.swift:
+ Provide functionality for URLSessionDataTask. Includes URL creation and Error enum. Also includes constants for use
+ by API classes for param creation.
+*/
 
 import Foundation
 
+// errors enum
 enum NetworkErrors: Swift.Error {
     case networkError(String)   // problems in URLSessionDataTask
-    case operatorError(String)  // issues such as typos, etc
+    case operatorError(String)  // issues such as typos, bad username/password, etc
 }
 
-class Networking {
+struct Networking {
     
-
+    // Constants: for sifting out dictionaries in params passed into taskWithParams
+    struct ParamKeys {
+        static let pathExtension = "pathExtension"
+        static let httpBody = "httpBody"
+        static let components = "components"
+        static let host = "host"
+        static let scheme = "scheme"
+        static let path = "path"
+        static let httpHeaderField = "httpHeaderField"
+        static let httpMethod = "httpMethod"
+    }
 }
 
-// task functions
 extension Networking {
     
+    // data task
     func taskWithParams(_ params:[String:AnyObject], completion:@escaping ([String:AnyObject]?, NetworkErrors?) -> Void) {
         
         // retrieve url
@@ -32,7 +48,7 @@ extension Networking {
         // create/build request
         var request = URLRequest(url: url)
         
-        // HTTP MEthod
+        // HTTP Method
         if let method = params[Networking.ParamKeys.httpMethod] as? String {
             request.httpMethod = method
         }
@@ -66,7 +82,7 @@ extension Networking {
                 return
             }
             
-            // test error
+            // test response, statusCode
             if let statusCode = (response as? HTTPURLResponse)?.statusCode {
                 
                 switch statusCode {
@@ -76,7 +92,7 @@ extension Networking {
                     completion(nil, NetworkErrors.operatorError("Invalid credentials. Check username/password"))
                     return
                 default:
-                completion(nil, NetworkErrors.networkError("Bad status code returned. non-2xx"))
+                    completion(nil, NetworkErrors.networkError("Bad status code returned. non-2xx"))
                     return
                 }
             }
@@ -91,7 +107,7 @@ extension Networking {
              convert to JSON
              Perform in two try's. First try tests for JSON using data. If error thrown, then try again, only remove
              first five characters per Udacity API spec...might be Udacity data
-            */
+             */
             let json:[String:AnyObject]!
             do {
                 // first pass test
@@ -116,7 +132,8 @@ extension Networking {
         task .resume()
     }
     
-    func urlForParams(_ params:[String:AnyObject]) -> URL? {
+    // create/return URL from params
+    fileprivate func urlForParams(_ params:[String:AnyObject]) -> URL? {
         
         // make a copy..will be pulling items out
         var params = params
@@ -133,34 +150,19 @@ extension Networking {
         
         //.. params now only contains queryItems
         
+        // create components
         var components = URLComponents()
         components.host = (apiComponents[Networking.ParamKeys.host] as! String)
         components.scheme = (apiComponents[Networking.ParamKeys.scheme] as! String)
         components.path = (apiComponents[Networking.ParamKeys.path] as! String) + (extensions ?? "")
-        // TODO: Add items !!!
+        
+        // add query items
+        components.queryItems = [URLQueryItem]()
+        for (key, value) in params {
+            let item = URLQueryItem(name: key, value: "\(value)")
+            components.queryItems?.append(item)
+        }
+        
         return components.url
     }
-}
-
-// constants
-extension Networking {
-    
-    // for sifting out dictionaries in params passed into taskWithParams
-    // pathExtension: use for appended to endpoint
-    // httpBody: for POST, DELETE methods
-    struct ParamKeys {
-        static let pathExtension = "pathExtension"
-        static let httpBody = "httpBody"
-        static let components = "components"
-        static let host = "host"
-        static let scheme = "scheme"
-        static let path = "path"
-        static let httpHeaderField = "httpHeaderField"
-        static let httpMethod = "httpMethod"
-    }
-}
-
-extension Networking {
-    
-
 }

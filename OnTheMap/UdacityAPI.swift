@@ -5,6 +5,9 @@
 //  Created by Online Training on 4/17/17.
 //  Copyright © 2017 Mitch Salcido. All rights reserved.
 //
+/*
+ About UdacityAPI.swift:
+ */
 
 import Foundation
 
@@ -13,9 +16,6 @@ class UdacityAPI {
     // singleton
     static let shared = UdacityAPI()
     private init() {}
-    
-    // retrieved when POST session.
-    var myUniqueKey:String?
 }
 
 extension UdacityAPI {

@@ -5,6 +5,9 @@
 //  Created by Online Training on 4/16/17.
 //  Copyright © 2017 Mitch Salcido. All rights reserved.
 //
+/*
+ About MapViewController.swift:
+ */
 
 import UIKit
 import MapKit
