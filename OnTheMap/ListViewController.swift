@@ -24,6 +24,10 @@ class ListViewController: UIViewController {
     }
     
     @IBAction func dropPinBbiPressed(_ sender: Any) {
+        
+        let controller = storyboard?.instantiateViewController(withIdentifier: "PostLocationNavControllerID") as! UINavigationController
+        
+        present(controller, animated: true, completion: nil)
     }
     
     @IBAction func refreshBbiPressed(_ sender: Any) {    

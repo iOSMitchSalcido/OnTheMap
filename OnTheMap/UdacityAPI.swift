@@ -15,7 +15,7 @@ class UdacityAPI {
     private init() {}
     
     // retrieved when POST session.
-    var uniqueKey: String?
+    var myUniqueKey:String?
 }
 
 extension UdacityAPI {
@@ -50,6 +50,7 @@ extension UdacityAPI {
         networking.taskWithParams(parameters as [String : AnyObject], completion: completion)
     }
     
+    // get public data for a user
     func getPublicUserData(userID: String, completion:@escaping ([String:AnyObject]?, NetworkErrors?) -> Void) {
         
         // create subcomponents
@@ -69,7 +70,11 @@ extension UdacityAPI {
         networking.taskWithParams(parameters, completion: completion)
     }
     
+    // delete session
     func deleteSession() {
+        
+        // copied from Udacity, unmodified
+        
         let request = NSMutableURLRequest(url: URL(string: "https://www.udacity.com/api/session")!)
         request.httpMethod = "DELETE"
         var xsrfCookie: HTTPCookie? = nil
@@ -89,6 +94,7 @@ extension UdacityAPI {
             let newData = data?.subdata(in: range) /* subset response data! */
             print(NSString(data: newData!, encoding: String.Encoding.utf8.rawValue)!)
         }
+        
         task.resume()
     }
 }

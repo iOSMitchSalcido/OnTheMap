@@ -18,8 +18,6 @@ class MapViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        updateMap()
     }
     
     func updateMap() {
@@ -51,6 +49,7 @@ class MapViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     @IBAction func dropPinBbiPressed(_ sender: Any) {
+        
     }
     @IBAction func refreshBbiPressed(_ sender: Any) {
         updateMap()

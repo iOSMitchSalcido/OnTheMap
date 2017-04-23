@@ -64,7 +64,7 @@ class LoginViewController: UIViewController {
         activityViewIndicator.startAnimating()
         
         // invoke API function to post session
-        UdacityAPI.shared.postSessionForUser("", password: "") {
+        UdacityAPI.shared.postSessionForUser(usernameTextField.text!, password: passwordTextField.text!) {
             (params, error) in
             
             // test error
@@ -81,7 +81,7 @@ class LoginViewController: UIViewController {
                 // good key/registration. OK to invoke tabVC
                 
                 // set uniqueKey in API
-                UdacityAPI.shared.uniqueKey = key
+                UdacityAPI.shared.myUniqueKey = key
                 
                 // load tabVC
                 DispatchQueue.main.async {
@@ -114,7 +114,7 @@ extension LoginViewController {
         
         /*
          Handle creation and presentation of an alertController. Function receives a NetworkError enum
-         and sifts for approproate title/message based on enum case and associated value.
+         and filters for approproate title/message based on enum case and associated value.
         */
         
         // title and message for alert
