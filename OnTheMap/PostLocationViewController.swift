@@ -22,9 +22,8 @@ class PostLocationViewController: UIViewController {
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var button: UIButton!
     
-    var userData:[String:AnyObject]?
     
-    var locationFound = false
+    var myLocationPlaceMark: CLPlacemark?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,7 +39,7 @@ class PostLocationViewController: UIViewController {
     
     @IBAction func buttonPressed(_ sender: Any) {
         
-        if !locationFound {
+        if myLocationPlaceMark == nil {
             locateOnMap()
         }
         else {
@@ -69,12 +68,12 @@ extension PostLocationViewController {
             
             if let placemark = placemark?.last, let coordinate = placemark.location?.coordinate {
                 
-                //let coord = placemark.location?.coordinate
+                // found a valid location, set placemark
+                self.myLocationPlaceMark = placemark
+                
+                // let coord = placemark.location?.coordinate
                 let span = MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
                 let mapRegion = MKCoordinateRegion(center: coordinate, span: span)
-                
-                // found a valid location
-                self.locationFound = true
                 
                 // update mapView
                 DispatchQueue.main.async {
@@ -99,9 +98,13 @@ extension PostLocationViewController {
     }
     
     func postLocation() {
-        
     }
 }
+
+extension PostLocationViewController {
+    
+}
+
 extension PostLocationViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

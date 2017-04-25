@@ -22,6 +22,12 @@ class ListViewController: UIViewController {
         super.viewDidLoad()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        tableView.reloadData()
+    }
+    
     @IBAction func logoutBbiPressed(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
@@ -40,7 +46,6 @@ class ListViewController: UIViewController {
 extension ListViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         return StudentsOnTheMap.shared.udacionCount
     }
     

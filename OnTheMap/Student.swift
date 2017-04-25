@@ -25,7 +25,7 @@ struct Student {
     let updatedAt: String
 
     // failable initializer
-    // ...only want the good students..the ones who entered all their info...
+    // ...only want the good students..the ones who's info is complete
     init?(_ student: [String:AnyObject]) {
         
         guard let objectId = student[Keys.objectId] as? String,
@@ -51,6 +51,20 @@ struct Student {
         self.longitude = longitude
         self.createdAt = createdAt
         self.updatedAt = updatedAt
+    }
+    
+    // easy init...create a student with only name/ID
+    init(uniqueKey: String, firstName: String, lastName: String) {
+        self.objectID = "objectID"
+        self.uniqueKey = uniqueKey
+        self.firstName = firstName
+        self.lastName = lastName
+        self.mapString = "mapString"
+        self.mediaURL = "mediaURL"
+        self.latitude = 0.0
+        self.longitude = 0.0
+        self.createdAt = "createdAt"
+        self.updatedAt = "updatedAt"
     }
 }
 

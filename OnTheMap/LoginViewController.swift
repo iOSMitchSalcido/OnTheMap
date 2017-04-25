@@ -41,8 +41,8 @@ class LoginViewController: UIViewController {
         // begin keyboard notifications for shifting up view when textField is editing
         startKeyboardNotifications()
         
-        // hide activityViewIndicator
-        activityViewIndicator.isHidden = true
+        // hide activityView
+        self.activateUILoginState(loggingIn: false)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -62,9 +62,7 @@ class LoginViewController: UIViewController {
          */
         
         // logging in..dim view and show activityIndicator during session post
-        stackView.alpha = 0.2
-        activityViewIndicator.isHidden = false
-        activityViewIndicator.startAnimating()
+        activateUILoginState(loggingIn: true)
         
         // invoke API function to post session
         UdacityAPI.shared.postSessionForUser(usernameTextField.text!, password: passwordTextField.text!) {
@@ -73,7 +71,10 @@ class LoginViewController: UIViewController {
             // test error
             if let error = error {
                 // error of some sort during task....present alert
-                self.showAlertForError(error)
+                DispatchQueue.main.async {
+                    self.showAlertForError(error)
+                    self.activateUILoginState(loggingIn: false)
+                }
             }
             // test for good POST session (valid key and registered = true)
             else if let account = params?[UdacityAPI.Account.account] as? [String:AnyObject],
@@ -83,13 +84,44 @@ class LoginViewController: UIViewController {
                 
                 // good key/registration. OK to invoke tabVC
                 
-                // set uniqueKey in API
-                StudentsOnTheMap.shared.myUniqueKey = key
+                /*
+                 Want to pull personal info from Udacity for use in creating a personal
+                 profile, myProfile. This will be used when posting our location on the map.
+                 
+                 If successful retrieval of personal info (first/last name) from Udacity, then
+                 OK to finish login and invoke TabVC
+                */
                 
-                // load tabVC
-                DispatchQueue.main.async {
-                    let tbc = self.storyboard?.instantiateViewController(withIdentifier: "TabBarControllerID") as! UITabBarController
-                    self.present(tbc, animated: true, completion: nil)
+                // get my user data
+                UdacityAPI.shared.getPublicUserData(userID: key) {
+                    (params, error) in
+                    
+                    // test error
+                    if let error = error {
+                        // error of some sort during task....present alert
+                        self.showAlertForError(error)
+                    }
+                    // check for first/last name..needed to create myProfile
+                    else if let user = params?["user"] as? [String:AnyObject],
+                        let firstName = user["first_name"] as? String,
+                        let lastName = user["last_name"] as? String {
+                        
+                        // create my profile...partially complete using easy init
+                        StudentsOnTheMap.shared.myProfile = Student(uniqueKey: key, firstName: firstName, lastName: lastName)
+                        print(StudentsOnTheMap.shared.myProfile!)
+                        
+                        // load tabVC
+                        DispatchQueue.main.async {
+                            let tbc = self.storyboard?.instantiateViewController(withIdentifier: "TabBarControllerID") as! UITabBarController
+                            self.present(tbc, animated: true, completion: nil)
+                        }
+                    }
+                    else {
+                        DispatchQueue.main.async {
+                            self.showAlertForError(NetworkErrors.operatorError("Bad user info. Login to Udacity to verify."))
+                            self.activateUILoginState(loggingIn: false)
+                        }
+                    }
                 }
             }
             // bad registration error
@@ -97,14 +129,10 @@ class LoginViewController: UIViewController {
                 
                 // error during registration/session post, but successful params created
                 let error = NetworkErrors.operatorError("Unregistered user ! Please verify credentials and try again")
-                self.showAlertForError(error)
-            }
-            
-            // restore UI
-            DispatchQueue.main.async {
-                self.stackView.alpha = 1.0
-                self.activityViewIndicator.isHidden = true
-                self.activityViewIndicator.stopAnimating()
+                DispatchQueue.main.async {
+                    self.showAlertForError(error)
+                    self.activateUILoginState(loggingIn: false)
+                }
             }
         }
     }
@@ -145,6 +173,21 @@ extension LoginViewController {
         // add action, present alert
         alert.addAction(cancelAction)
         present(alert, animated: true, completion: nil)
+    }
+    
+    // UI state while logging in
+    func activateUILoginState(loggingIn: Bool) {
+        
+        if loggingIn {
+            stackView.alpha = 0.2
+            activityViewIndicator.isHidden = false
+            activityViewIndicator.startAnimating()
+        }
+        else {
+            stackView.alpha = 1.0
+            activityViewIndicator.isHidden = true
+            activityViewIndicator.stopAnimating()
+        }
     }
 }
 

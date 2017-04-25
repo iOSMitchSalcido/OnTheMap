@@ -28,8 +28,7 @@ class StudentsOnTheMap {
         }
     }
     
-    // retrieved when POST session.
-    var myUniqueKey:String?
+    var myProfile: Student?
 }
 
 // helper functions
@@ -67,6 +66,9 @@ extension StudentsOnTheMap {
         // recent location
         udacions = cleanupStudents(students)
     }
+}
+
+extension StudentsOnTheMap {
     
     /*
      helper function. Retrieving students locations returns many results..lot's of duplicate students.
@@ -119,4 +121,3 @@ extension StudentsOnTheMap {
         return cleanedupStudents
     }
 }
-
