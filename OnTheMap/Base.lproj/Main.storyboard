@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -29,7 +29,7 @@
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Udacity" translatesAutoresizingMaskIntoConstraints="NO" id="aps-fF-ejg">
                                         <rect key="frame" x="0.0" y="0.0" width="288" height="288"/>
                                     </imageView>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="  Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="5sn-kx-OAb">
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="  Email" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="5sn-kx-OAb">
                                         <rect key="frame" x="0.0" y="293" width="288" height="38"/>
                                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
@@ -42,7 +42,7 @@
                                             <outlet property="delegate" destination="BYZ-38-t0r" id="10N-iK-3zp"/>
                                         </connections>
                                     </textField>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="  Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="RUe-z0-aku">
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="  Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="RUe-z0-aku">
                                         <rect key="frame" x="0.0" y="336" width="288" height="38"/>
                                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
@@ -147,12 +147,15 @@
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="QDR-C4-add">
                                 <rect key="frame" x="0.0" y="64" width="320" height="455"/>
+                                <connections>
+                                    <outlet property="delegate" destination="Xej-Xe-GNe" id="lyo-1O-2W2"/>
+                                </connections>
                             </mapView>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="Qgk-kz-vrn">
                                 <rect key="frame" x="142" y="266" width="37" height="37"/>
                             </activityIndicatorView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="QDR-C4-add" secondAttribute="trailing" id="BMF-8c-43U"/>
                             <constraint firstItem="Qgk-kz-vrn" firstAttribute="centerX" secondItem="FxV-Vd-8lq" secondAttribute="centerX" id="ULB-6I-DLa"/>
@@ -182,6 +185,7 @@
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
+                        <outlet property="activityIndicator" destination="Qgk-kz-vrn" id="IRL-ca-x1C"/>
                         <outlet property="dropPinBbi" destination="fUE-ZT-C6V" id="7cE-qG-j5u"/>
                         <outlet property="logoutBbi" destination="t2R-Fi-qGU" id="zY6-lf-OSb"/>
                         <outlet property="mapView" destination="QDR-C4-add" id="VdE-52-WYF"/>
@@ -247,7 +251,7 @@
                                 <subviews>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="cC3-RI-tKq">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ListCellID" textLabel="OZy-9Q-vuh" style="IBUITableViewCellStyleDefault" id="T52-17-k3b">
                                                 <rect key="frame" x="0.0" y="28" width="320" height="44"/>
@@ -273,13 +277,14 @@
                                         </connections>
                                     </tableView>
                                 </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </stackView>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="Dtd-uU-M3D">
                                 <rect key="frame" x="142" y="266" width="37" height="37"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </activityIndicatorView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="aWy-ls-7MC" firstAttribute="height" secondItem="1ZW-qV-rLy" secondAttribute="height" id="24L-s7-TPx"/>
                             <constraint firstItem="aWy-ls-7MC" firstAttribute="width" secondItem="1ZW-qV-rLy" secondAttribute="width" id="GyN-tg-d1b"/>
@@ -307,6 +312,7 @@
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
+                        <outlet property="activityIndicator" destination="Dtd-uU-M3D" id="oQM-LX-9cl"/>
                         <outlet property="dropPinBbi" destination="yRT-Cs-N3f" id="GZv-S2-b3b"/>
                         <outlet property="logoutBbi" destination="UCI-Bz-quv" id="M1K-yf-dzS"/>
                         <outlet property="refreshBbi" destination="JM2-ym-zXq" id="Q05-hl-IMx"/>
@@ -437,10 +443,10 @@
             </objects>
             <point key="canvasLocation" x="6123.75" y="-696.12676056338034"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Portrait Nav Controller-->
         <scene sceneID="aUg-mu-WS8">
             <objects>
-                <navigationController storyboardIdentifier="PostLocationNavControllerID" automaticallyAdjustsScrollViewInsets="NO" id="DMO-bq-vqR" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="PostLocationNavControllerID" automaticallyAdjustsScrollViewInsets="NO" id="DMO-bq-vqR" customClass="PortraitNavController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="k71-tL-AqV">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>

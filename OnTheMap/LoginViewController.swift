@@ -24,6 +24,7 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var stackView: UIStackView!
     @IBOutlet weak var activityViewIndicator: UIActivityIndicatorView!
     
+    // portrait
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return UIInterfaceOrientationMask.portrait
     }
@@ -57,8 +58,14 @@ class LoginViewController: UIViewController {
         /*
          Handle login process. This involves posting a session to the Udacity API.
          The user/password are retirieved from the textFields and passed into the
-         UdacityAPI. Functionality included for dimming and showing activityView
-         for improved UI experience
+         UdacityAPI.
+         
+         After successful completion of postSession, user publicInfo is retrieved
+         from Udacity API. This info is then used to create a profile (Student) struct
+         for the user, which is later used to post locations.
+         
+         Successful login requires both post session AND successfule retrieval of user
+         public info.
          */
         
         // logging in..dim view and show activityIndicator during session post
@@ -82,46 +89,13 @@ class LoginViewController: UIViewController {
                 let registered = account[UdacityAPI.Account.registered] as? Bool,
                 registered == true {
                 
-                // good key/registration. OK to invoke tabVC
+                // assign to uniqueKey
+                StudentsOnTheMap.shared.myUniqueKey = key
                 
-                /*
-                 Want to pull personal info from Udacity for use in creating a personal
-                 profile, myProfile. This will be used when posting our location on the map.
-                 
-                 If successful retrieval of personal info (first/last name) from Udacity, then
-                 OK to finish login and invoke TabVC
-                */
-                
-                // get my user data
-                UdacityAPI.shared.getPublicUserData(userID: key) {
-                    (params, error) in
-                    
-                    // test error
-                    if let error = error {
-                        // error of some sort during task....present alert
-                        self.showAlertForError(error)
-                    }
-                    // check for first/last name..needed to create myProfile
-                    else if let user = params?["user"] as? [String:AnyObject],
-                        let firstName = user["first_name"] as? String,
-                        let lastName = user["last_name"] as? String {
-                        
-                        // create my profile...partially complete using easy init
-                        StudentsOnTheMap.shared.myProfile = Student(uniqueKey: key, firstName: firstName, lastName: lastName)
-                        print(StudentsOnTheMap.shared.myProfile!)
-                        
-                        // load tabVC
-                        DispatchQueue.main.async {
-                            let tbc = self.storyboard?.instantiateViewController(withIdentifier: "TabBarControllerID") as! UITabBarController
-                            self.present(tbc, animated: true, completion: nil)
-                        }
-                    }
-                    else {
-                        DispatchQueue.main.async {
-                            self.showAlertForError(NetworkErrors.operatorError("Bad user info. Login to Udacity to verify."))
-                            self.activateUILoginState(loggingIn: false)
-                        }
-                    }
+                // load tabVC
+                DispatchQueue.main.async {
+                    let tbc = self.storyboard?.instantiateViewController(withIdentifier: "TabBarControllerID") as! UITabBarController
+                    self.present(tbc, animated: true, completion: nil)
                 }
             }
             // bad registration error
@@ -140,7 +114,7 @@ class LoginViewController: UIViewController {
 
 extension LoginViewController {
 
-    // alert
+    // helper function for displaying alert
     func showAlertForError(_ error: NetworkErrors) {
         
         /*

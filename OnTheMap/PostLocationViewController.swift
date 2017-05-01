@@ -14,6 +14,7 @@ import MapKit
 
 class PostLocationViewController: UIViewController {
 
+    // ref to UI elements
     @IBOutlet weak var cancelBbi: UIBarButtonItem!
     @IBOutlet weak var stackView: UIStackView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
@@ -22,15 +23,14 @@ class PostLocationViewController: UIViewController {
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var button: UIButton!
     
-    
+    // placeMark...set after location found
     var myLocationPlaceMark: CLPlacemark?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         mapView.isHidden = true
-        button.isEnabled = false
-        activityIndicator.isHidden = true
+        activateUIState(searching: false)
     }
     
     @IBAction func cancelBbiPressed(_ sender: Any) {
@@ -51,12 +51,8 @@ class PostLocationViewController: UIViewController {
 extension PostLocationViewController {
     
     func locateOnMap() {
-        
-        cancelBbi.isEnabled = false
-        button.isEnabled = false
-        activityIndicator.isHidden = false
-        activityIndicator.startAnimating()
-        stackView.alpha = 0.3
+    
+        activateUIState(searching: true)
         
         let geoCoder = CLGeocoder()
         geoCoder.geocodeAddressString(textField.text!) {
@@ -80,7 +76,7 @@ extension PostLocationViewController {
                     self.mapView.isHidden = false
                     self.mapView.setRegion(mapRegion, animated: true)
                     self.button.setTitle("Post Location", for: .normal)
-                    self.whereAtLabel.text = "Something Extra..?"
+                    self.whereAtLabel.text = "Add Something Extra.."
                     self.textField.text = nil
                     self.textField.placeholder = "Add URL"
                 }
@@ -88,21 +84,47 @@ extension PostLocationViewController {
             
             // restore UI
             DispatchQueue.main.async {
-                self.cancelBbi.isEnabled = true
-                self.button.isEnabled = true
-                self.activityIndicator.isHidden = true
-                self.activityIndicator.stopAnimating()
-                self.stackView.alpha = 1.0
+                self.activateUIState(searching: false)
             }
         }
     }
     
     func postLocation() {
-    }
-}
 
-extension PostLocationViewController {
+        if let student = StudentsOnTheMap.shared.onTheMap(uniqueKey: StudentsOnTheMap.shared.myUniqueKey) {
+
+            ParseAPI.shared.putStudentLocation(student.0) {
+                (params, error) in
+                
+                print("put location")
+                
+                if error != nil {
+                    print("error put")
+                }
+                else if let params = params {
+                    print(params)
+                }
+            }
+        }
+        else {
+        }
+    }
     
+    func activateUIState(searching: Bool) {
+
+        activityIndicator.isHidden = !searching
+        button.isEnabled = (!searching) && !((textField.text?.isEmpty)!)
+        activityIndicator.isHidden = !searching
+        
+        if searching {
+            activityIndicator.startAnimating()
+            stackView.alpha = 0.3
+        }
+        else {
+            activityIndicator.stopAnimating()
+            stackView.alpha = 1.0
+        }
+    }
 }
 
 extension PostLocationViewController: UITextFieldDelegate {

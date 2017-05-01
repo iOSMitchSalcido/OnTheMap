@@ -13,16 +13,16 @@ import Foundation
 
 struct Student {
     
-    let objectID: String
-    let uniqueKey: String
-    let firstName: String
-    let lastName: String
-    let mapString: String
-    let mediaURL: String
-    let latitude: Float
-    let longitude: Float
-    let createdAt: String
-    let updatedAt: String
+    var objectId: String
+    var uniqueKey: String
+    var firstName: String
+    var lastName: String
+    var mapString: String
+    var mediaURL: String
+    var latitude: Double
+    var longitude: Double
+    var createdAt: String
+    var updatedAt: String
 
     // failable initializer
     // ...only want the good students..the ones who's info is complete
@@ -34,14 +34,14 @@ struct Student {
             let lastName = student[Keys.lastName] as? String,
             let mapString = student[Keys.mapString] as? String,
             let mediaURL = student[Keys.mediaURL] as? String,
-            let latitude = student[Keys.latitude] as? Float,
-            let longitude = student[Keys.longitude] as? Float,
+            let latitude = student[Keys.latitude] as? Double,
+            let longitude = student[Keys.longitude] as? Double,
             let createdAt = student[Keys.createdAt] as? String,
             let updatedAt = student[Keys.updatedAt] as? String else {
                 return nil
         }
         
-        self.objectID = objectId
+        self.objectId = objectId
         self.uniqueKey = uniqueKey
         self.firstName = firstName
         self.lastName = lastName
@@ -55,7 +55,7 @@ struct Student {
     
     // easy init...create a student with only name/ID
     init(uniqueKey: String, firstName: String, lastName: String) {
-        self.objectID = "objectID"
+        self.objectId = "objectId"
         self.uniqueKey = uniqueKey
         self.firstName = firstName
         self.lastName = lastName

@@ -28,7 +28,7 @@ class StudentsOnTheMap {
         }
     }
     
-    var myProfile: Student?
+    var myUniqueKey: String!
 }
 
 // helper functions
@@ -39,15 +39,21 @@ extension StudentsOnTheMap {
         return udacions[index]
     }
     
-    // test if uniqueKey is a udacion who is on the map
-    func isUdation(uniqueKey: String) -> Bool {
+    func replaceUdacionAtIndex(_ index: Int, withStudent: Student) {
+        
+        udacions[index] = withStudent
+    }
     
-        for udacion in udacions {
-            if udacion.uniqueKey == uniqueKey {
-                return true
+    // return student and index of student in udacions array...if exists. Otherwise return nil
+    func onTheMap(uniqueKey: String) -> (Student, Int)? {
+        
+        for (index, value) in udacions.enumerated() {
+            if value.uniqueKey == uniqueKey {
+                return (value, index)
             }
         }
-        return true
+        
+        return nil
     }
     
     // function to read in array of students, and place into udacians array
