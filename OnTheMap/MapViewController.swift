@@ -51,6 +51,8 @@ class MapViewController: UIViewController {
                     errorMessage = value
                 case .operatorError(let value):
                     errorMessage = value
+                case .generalError(let value):
+                    errorMessage = value
                 }
                 print(errorMessage)
             }
@@ -122,6 +124,9 @@ extension MapViewController {
             alertMessage = value
         case .operatorError(let value):
             alertTitle = "User Error"
+            alertMessage = value
+        case .generalError(let value):
+            alertTitle = "Misc/unknown Error"
             alertMessage = value
         }
         

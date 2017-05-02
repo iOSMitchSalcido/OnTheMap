@@ -118,4 +118,10 @@ extension UdacityAPI {
         static let key = "key"
         static let registered = "registered"
     }
+    
+    struct ResponseKeys {
+        static let user = "user"
+        static let firstName = "first_name"
+        static let lastName = "last_name"
+    }
 }

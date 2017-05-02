@@ -17,6 +17,7 @@ import Foundation
 enum NetworkErrors: Swift.Error {
     case networkError(String)   // problems in URLSessionDataTask
     case operatorError(String)  // issues such as typos, bad username/password, etc
+    case generalError(String)   // misc error, unknown, etc
 }
 
 struct Networking {

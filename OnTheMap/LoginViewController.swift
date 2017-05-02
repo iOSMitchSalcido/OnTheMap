@@ -134,6 +134,9 @@ extension LoginViewController {
         case .operatorError(let value):
             alertTitle = "User Error"
             alertMessage = value
+        case .generalError(let value):
+            alertTitle = "Misc/unknown Error"
+            alertMessage = value
         }
         
         // create alert and cancel action

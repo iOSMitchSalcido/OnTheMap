@@ -49,6 +49,8 @@ class ListViewController: UIViewController {
                     errorMessage = value
                 case .operatorError(let value):
                     errorMessage = value
+                case .generalError(let value):
+                    errorMessage = value
                 }
                 print(errorMessage)
             }
@@ -57,6 +59,7 @@ class ListViewController: UIViewController {
                 StudentsOnTheMap.shared.newCohort(students)
             }
             
+            // update UI
             DispatchQueue.main.async {
                 self.tableView.reloadData()
                 self.activateUIState(searching: false)
@@ -138,6 +141,9 @@ extension ListViewController {
         case .operatorError(let value):
             alertTitle = "User Error"
             alertMessage = value
+        case .generalError(let value):
+            alertTitle = "Misc/unknown Error"
+            alertMessage = value
         }
         
         // create alert and cancel action
@@ -183,5 +189,10 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate {
         let student = StudentsOnTheMap.shared.udacionAtIndex(indexPath.row)
         cell.textLabel?.text = student.firstName + " " + student.lastName
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }

@@ -143,4 +143,11 @@ extension ParseAPI {
     fileprivate struct Paths {
         static let studentLocation = "/classes/StudentLocation"
     }
+    
+    struct ResponseKeys {
+        static let createdAt = "createdAt"
+        static let updatedAt = "updatedAt"
+        static let objectId = "objectId"
+        static let results = "results"
+    }
 }
