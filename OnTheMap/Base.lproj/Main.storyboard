@@ -413,6 +413,7 @@
                             </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="0.40000000600000002" green="0.80000001190000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="y1a-cY-RDw" firstAttribute="top" secondItem="MP5-qA-bsp" secondAttribute="bottom" id="18F-bd-nmX"/>
                             <constraint firstItem="MP5-qA-bsp" firstAttribute="top" secondItem="OLf-g2-XBg" secondAttribute="bottom" id="2eu-RC-LQV"/>
@@ -421,6 +422,9 @@
                             <constraint firstItem="MP5-qA-bsp" firstAttribute="leading" secondItem="3Bz-OG-nKp" secondAttribute="leading" id="qCs-dQ-KkO"/>
                             <constraint firstItem="paK-NX-GD1" firstAttribute="centerY" secondItem="3Bz-OG-nKp" secondAttribute="centerY" id="txg-dT-Wra"/>
                         </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="cqk-gn-OLc" appends="YES" id="h1d-0M-QDA"/>
+                        </connections>
                     </view>
                     <navigationItem key="navigationItem" id="Gy0-El-Oqo">
                         <barButtonItem key="rightBarButtonItem" systemItem="cancel" id="D2I-HR-rJQ">
@@ -440,6 +444,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aha-Vz-fd5" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="cqk-gn-OLc">
+                    <connections>
+                        <action selector="singleTapDetected:" destination="nt5-gg-y1d" id="zSN-7m-BEa"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="6123.75" y="-696.12676056338034"/>
         </scene>

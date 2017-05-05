@@ -12,7 +12,7 @@
  geocoded into a CLPlacemark class, which contains coordinate data used to post location.
  
  When location is successfully geocoded, the user is prompted to enter a URL (linked in, facebook, etc).
- Upon successful entering of URL, the user can then "post" their location. If successful post, this VC is
+ Upon successful entering of URL, the user can then "post" their location. If successful post, VC is
  then dismissed.
  */
 
@@ -64,9 +64,9 @@ class PostLocationViewController: UIViewController {
         }
         else {
             
-            // post location
+            // post/update location
             
-            // test if already on the map to steer into update or post
+            // test if already on the map
             if let student = StudentsOnTheMap.shared.onTheMap(uniqueKey: StudentsOnTheMap.shared.myUniqueKey) {
                 
                 // already on map...update
@@ -79,6 +79,13 @@ class PostLocationViewController: UIViewController {
             }
         }
     }
+    
+    // tap in view...end textEditing
+    @IBAction func singleTapDetected(_ sender: UITapGestureRecognizer) {
+        
+        view.endEditing(true)
+        button.isEnabled = !(textField.text?.isEmpty)!
+    }
 }
 
 // location, posting functions
@@ -89,7 +96,7 @@ extension PostLocationViewController {
     
         /*
          function to retieve location data from text. Using CLGeocoder, retrieve placemark
-         and coord data for use on map
+         and coord data for use on map.
          */
         
         // UI state
@@ -137,6 +144,7 @@ extension PostLocationViewController {
                 
                 // test for student already on map. If on map, then use existing mediaURL
                 // in textField. Otherwise nil textField and show placeholder
+                // ..if updating location, user may not want to also have to update mediaURL
                 if let student = StudentsOnTheMap.shared.onTheMap(uniqueKey: StudentsOnTheMap.shared.myUniqueKey) {
                     self.textField.text = student.0.mediaURL
                     self.textField.placeholder = nil
@@ -171,12 +179,10 @@ extension PostLocationViewController {
         /*
          !! NOT currently on map. POST method to post location !!
          To post location, need to first create a Student struct (required by ParseAPI POST method).
-         This Student will be a stripped down created using uniqueId, first/last name, and URL currently
-         in textField.
          
-         POST student location proceedure:
+         POST student location procedure:
          1) get student public user info..need first/last name info
-         2) create student..use "easy" init for Student struct..also assign mediaURL, location coord
+         2) create student..use "easy" init for Student struct..also assign mediaURL and location coord
          3) POST location using ParseAPI
          4) refresh udacions array in StudentsOnTheMap singleton, dismiss VC
          */
@@ -190,8 +196,11 @@ extension PostLocationViewController {
             
             // test error
             if let error = error {
+                
+                // show alert and update UI state
                 DispatchQueue.main.async {
                     self.showAlertForError(error)
+                    self.activateUIState(searching: false)
                 }
             }
             // test params
@@ -214,8 +223,11 @@ extension PostLocationViewController {
                     
                     // test error
                     if let error = error {
+                        
+                        // show alert and update UI state
                         DispatchQueue.main.async {
                             self.showAlertForError(error)
+                            self.activateUIState(searching: false)
                         }
                     }
                     // test params for createdAt and objectId
@@ -224,28 +236,8 @@ extension PostLocationViewController {
                         
                         // good params
                         
-                        // 4) refresh udacions
-                        ParseAPI.shared.studentLocations() {
-                            (params, error) in
-
-                            // test error
-                            if let error = error {
-                                DispatchQueue.main.async {
-                                    self.showAlertForError(error)
-                                }
-                            }
-                            // test params
-                            else if let students = params?[ParseAPI.ResponseKeys.results] as? [[String:AnyObject]] {
-                                
-                                // good parse..update udacions with new cohort...now includes this student
-                                StudentsOnTheMap.shared.newCohort(students)
-                                
-                                // dismiss
-                                DispatchQueue.main.async {
-                                    self.dismiss(animated: true, completion: nil)
-                                }
-                            }
-                        }
+                        // 4) refresh udacions, dismiss VC
+                        self.updateCohort()
                     }
                     // unknown post failure
                     else {
@@ -297,44 +289,18 @@ extension PostLocationViewController {
             
             // test error, show alert if error
             if let error = error {
+                
+                // show alert and update UI state
                 DispatchQueue.main.async {
                     self.showAlertForError(error)
+                    self.activateUIState(searching: false)
                 }
             }
             // test params
             else if let _ = params?[Student.Keys.updatedAt] {
                 
                 // 3) refresh udacions, dismiss VC
-                ParseAPI.shared.studentLocations() {
-                    (params, error) in
-                    
-                    // test error
-                    if let error = error {
-                        DispatchQueue.main.async {
-                            self.showAlertForError(error)
-                        }
-                    }
-                    // test params
-                    else if let students = params?[ParseAPI.ResponseKeys.results] as? [[String:AnyObject]] {
-                        
-                        // update udacions with updated cohort
-                        StudentsOnTheMap.shared.newCohort(students)
-                        
-                        // dismiss
-                        DispatchQueue.main.async {
-                            self.dismiss(animated: true, completion: nil)
-                        }
-                    }
-                    // unknown error retieving student locations
-                    else {
-                        
-                        // show alert and update UI state
-                        DispatchQueue.main.async {
-                            self.showAlertForError(NetworkErrors.generalError("Unable to update student locations"))
-                            self.activateUIState(searching: false)
-                        }
-                    }
-                }
+                self.updateCohort()
             }
             // unknown problem with returned data
             else {
@@ -408,6 +374,33 @@ extension PostLocationViewController {
         else {
             activityIndicator.stopAnimating()
             stackView.alpha = 1.0
+        }
+    }
+    
+    // function to update udacion cohort and dismiss VC if successful update
+    // ..common to both post and put methods.
+    func updateCohort() {
+        
+        StudentsOnTheMap.shared.updateCohort() {
+            (error) in
+            
+            // test error
+            if let error = error {
+                
+                // show alert and update UI state
+                DispatchQueue.main.async {
+                    self.showAlertForError(error)
+                    self.activateUIState(searching: false)
+                }
+            }
+            // good update
+            else {
+                
+                // done posting..dismiss
+                DispatchQueue.main.async {
+                    self.dismiss(animated: true, completion: nil)
+                }
+            }
         }
     }
 }

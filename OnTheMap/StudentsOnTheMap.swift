@@ -72,6 +72,36 @@ extension StudentsOnTheMap {
         // recent location
         udacions = cleanupStudents(students)
     }
+    
+    // update cohort array, fire completion
+    func updateCohort(completion: @escaping (NetworkErrors?) -> Void) {
+        
+        ParseAPI.shared.studentLocations() {
+            (params, error) in
+            
+            // test error
+            if let error = error {
+                
+                // fire completion with error
+                completion(error)
+            }
+            // test params
+            else if let students = params?[ParseAPI.ResponseKeys.results] as? [[String:AnyObject]] {
+                
+                // good parse..update udacions array with new cohort
+                StudentsOnTheMap.shared.newCohort(students)
+                
+                // done
+                completion(nil)
+            }
+            // unknown student locations failure
+            else {
+                
+                // fire completion with error
+                completion(NetworkErrors.generalError("Unable to retrieve student locations"))
+            }
+        }
+    }
 }
 
 extension StudentsOnTheMap {
@@ -83,47 +113,77 @@ extension StudentsOnTheMap {
      */
     fileprivate func cleanupStudents(_ students: [Student]) -> [Student] {
         
+        // track ID's that have been inspected
         var checkedIDs = [String]()
+        
+        // dictionary to store all postings by a given student
         var studentsByIDs = [String: [Student]]()
+        
+        // iterate thru students
         for student in students {
             
+            // test if ID has been inspected
             if !checkedIDs.contains(student.uniqueKey) {
                 
+                // ID has not been inspected..add to checkedIDs array
                 checkedIDs.append(student.uniqueKey)
                 
+                // array to store students with idential ID's
                 var studentsWithSameIDs = [Student]()
                 
+                // iterate thru all students again.
                 for anotherStudent in students {
                     
+                    // Pick out students who's IDs match..add to array
                     if anotherStudent.uniqueKey == student.uniqueKey {
                         studentsWithSameIDs.append(anotherStudent)
                     }
                 }
                 
+                // add to dictionary
                 studentsByIDs[student.uniqueKey] = studentsWithSameIDs
             }
         }
         
         // studentsByIDs now contains a dictionary. The keys are "uniqueKey" for a given student, and the value is
-        // an array containing each location update/creation for that student
+        // an array containing each location update/creation for that student.
         
-        // array to store good students
-        var cleanedupStudents = [Student]()
+        /*
+         Now need to sort out the most recent post/update by a given student
+        */
         
+        // array to store students..
+        var mostRecentStudentPost = [Student]()
         for (_, studentEntries) in studentsByIDs {
             
+            // sort post/updates of a given student
             let sorted = studentEntries.sorted() {
                 (entry1, entry2) in
-                let date1 = entry1.createdAt
-                let date2 = entry2.createdAt
-                return date1.compare(date2) == ComparisonResult.orderedAscending
+                let date1 = entry1.updatedAt
+                let date2 = entry2.updatedAt
+                return date1.compare(date2) == ComparisonResult.orderedDescending
             }
             
-            if let mostRecentStudentLocation = sorted.last {
-                cleanedupStudents.append(mostRecentStudentLocation)
+            // retrieve most recent post/update
+            if let mostRecent = sorted.first {
+                mostRecentStudentPost.append(mostRecent)
             }
         }
         
-        return cleanedupStudents
+        // Each Student in "mostRecentStudentPost" array is a unique student, with their most recent
+        // posting/update info.
+
+        // Now sort students by post/update date
+        let onTheMapAndSortedByDate = mostRecentStudentPost.sorted() {
+            (entry1, entry2) in
+            let date1 = entry1.updatedAt
+            let date2 = entry2.updatedAt
+            return date1.compare(date2) == ComparisonResult.orderedDescending
+        }
+        
+        // " Pick out students who's IDs match" contains all the students who are "on the map",
+        // sorted by students with most recent post/update at index 0, and oldest post/update
+        // at end index
+        return onTheMapAndSortedByDate
     }
 }
