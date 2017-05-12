@@ -7,6 +7,9 @@
 //
 /*
  About LoginViewController.swift:
+ Handle login process for app. Username and password textFields are provided, along with button for login. Upon entry
+ of username and password, pressing login button will invoke UdacityAPI function to post a new session. If post is
+ successful, then VC will invoke tabBar controller which contains main views for app, map and list of students on map.
  */
 
 import UIKit
@@ -14,17 +17,13 @@ import UIKit
 class LoginViewController: UIViewController {
     
     // ref to textFields
-    @IBOutlet weak var usernameTextField: UITextField!
-    @IBOutlet weak var passwordTextField: UITextField!
+    @IBOutlet weak var usernameTextField: UITextField!      // textField for username
+    @IBOutlet weak var passwordTextField: UITextField!      // textField for password
+    @IBOutlet weak var loginButton: UIButton!               // button for login
+    @IBOutlet weak var stackView: UIStackView!              // ref to stackView. Used for dimming view indicating network activity
+    @IBOutlet weak var activityViewIndicator: UIActivityIndicatorView!  // USed for indicating network activity
     
-    // ref to loginButton..need to enable/disable based in UI state
-    @IBOutlet weak var loginButton: UIButton!
-    
-    // ref to stackView and activityView..dimmed/activite to indicate network activity
-    @IBOutlet weak var stackView: UIStackView!
-    @IBOutlet weak var activityViewIndicator: UIActivityIndicatorView!
-    
-    // portrait
+    // portrait orientation
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return UIInterfaceOrientationMask.portrait
     }
@@ -60,12 +59,8 @@ class LoginViewController: UIViewController {
          The user/password are retirieved from the textFields and passed into the
          UdacityAPI.
          
-         After successful completion of postSession, user publicInfo is retrieved
-         from Udacity API. This info is then used to create a profile (Student) struct
-         for the user, which is later used to post locations.
-         
-         Successful login requires both post session AND successfule retrieval of user
-         public info.
+         Of the params returned from the post, "uniqueKey" is checked. If good, then invoke
+         tabBar controller containing main app views, map and list of students on the map...
          */
         
         // logging in..dim view and show activityIndicator during session post
@@ -77,7 +72,7 @@ class LoginViewController: UIViewController {
             
             // test error
             if let error = error {
-                // error of some sort during task....present alert
+                // error during task....present alert
                 DispatchQueue.main.async {
                     self.showAlertForError(error)
                     self.activateUILoginState(loggingIn: false)
@@ -112,9 +107,10 @@ class LoginViewController: UIViewController {
     }
 }
 
+// helper functions
 extension LoginViewController {
 
-    // helper function for displaying alert
+    // helper function for displaying alert for NetworkErrors enum type
     func showAlertForError(_ error: NetworkErrors) {
         
         /*
@@ -168,7 +164,7 @@ extension LoginViewController {
     }
 }
 
-// keyboard show/hide functionality
+// keyboard show/hide functionality...also tap gesture
 extension LoginViewController {
     
     // begin keyboard show/hide notifications

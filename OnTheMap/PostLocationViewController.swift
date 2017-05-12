@@ -11,7 +11,7 @@
  VC initially prompts user to enter text for a location (city, town, etc). This text is then
  geocoded into a CLPlacemark class, which contains coordinate data used to post location.
  
- When location is successfully geocoded, the user is prompted to enter a URL (linked in, facebook, etc).
+ When location is successfully geocoded, the user is prompted to enter a URL ("LinkedIn", facebook, etc).
  Upon successful entering of URL, the user can then "post" their location. If successful post, VC is
  then dismissed.
  */
@@ -143,8 +143,7 @@ extension PostLocationViewController {
                 self.button.setTitle("Post Location", for: .normal)
                 
                 // test for student already on map. If on map, then use existing mediaURL
-                // in textField. Otherwise nil textField and show placeholder
-                // ..if updating location, user may not want to also have to update mediaURL
+                // in textField. Otherwise nil textField and show placeholder.
                 if let student = StudentsOnTheMap.shared.onTheMap(uniqueKey: StudentsOnTheMap.shared.myUniqueKey) {
                     self.textField.text = student.0.mediaURL
                     self.textField.placeholder = nil
@@ -166,7 +165,7 @@ extension PostLocationViewController {
             // unknown placemark or location coordinate error
             else {
                 
-                // present a general purpose error alert, restore UI
+                // present a general error alert, restore UI
                 self.showAlertForError(NetworkErrors.generalError("Unable to find a valid location."))
                 self.activateUIState(searching: false)
             }
@@ -422,5 +421,20 @@ extension PostLocationViewController: UITextFieldDelegate {
         button.isEnabled = !(textField.text?.isEmpty)!
         
         return true
+    }
+}
+
+// mapView delegate functions
+extension PostLocationViewController: MKMapViewDelegate {
+    
+    
+    func mapViewDidFinishRenderingMap(_ mapView: MKMapView, fullyRendered: Bool) {
+        
+        // add a pin annot to map after done rendering
+        if let coord = placemark?.location?.coordinate {
+            let annot = MKPointAnnotation()
+            annot.coordinate = coord
+            mapView.addAnnotation(annot)
+        }
     }
 }

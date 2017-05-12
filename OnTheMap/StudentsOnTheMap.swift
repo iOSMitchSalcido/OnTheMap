@@ -19,7 +19,7 @@ class StudentsOnTheMap {
     private init() {}
     
     // cohort of Udacity students who are "On The Map"
-    fileprivate var udacions = [Student]()
+    var udacions = [Student]()
     
     // count of udacions
     var udacionCount: Int {
@@ -33,16 +33,6 @@ class StudentsOnTheMap {
 
 // helper functions
 extension StudentsOnTheMap {
-    
-    // return udacion at index
-    func udacionAtIndex(_ index: Int) -> Student {
-        return udacions[index]
-    }
-    
-    func replaceUdacionAtIndex(_ index: Int, withStudent: Student) {
-        
-        udacions[index] = withStudent
-    }
     
     // return student and index of student in udacions array...if exists. Otherwise return nil
     func onTheMap(uniqueKey: String) -> (Student, Int)? {

@@ -26,6 +26,8 @@ class ListViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        // hide activityIndicator, reload data
+        activateUIState(searching: false)
         tableView.reloadData()
     }
     
@@ -43,19 +45,15 @@ class ListViewController: UIViewController {
             // test error
             if let error = error {
                 
-                var errorMessage:String!
-                switch error {
-                case .networkError(let value):
-                    errorMessage = value
-                case .operatorError(let value):
-                    errorMessage = value
-                case .generalError(let value):
-                    errorMessage = value
+                // show alert for error message
+                DispatchQueue.main.async {
+                    self.showAlertForError(error)
                 }
-                print(errorMessage)
             }
-                // test params
+            // test params
             else if let params = params, let students = params["results"] as? [[String:AnyObject]] {
+                
+                // good params...create new cohort from retrieved students
                 StudentsOnTheMap.shared.newCohort(students)
             }
             
@@ -78,21 +76,34 @@ class ListViewController: UIViewController {
     
     @IBAction func dropPinBbiPressed(_ sender: Any) {
         
+        /*
+         Invoke process to add/update map location. Function tests to see if student currently
+         has a location posted. If so, then an alert is presented to allow the user to cancel out.
+         If no currentl location or proceed pressed, the invoke PostLocationVC to allow student to
+         continue process of posting location.
+         */
+        
+        // closure to invoke PostLocationVC....save a few lines of code below...
+        let postLocation = {() -> Void in
+            let controller = self.storyboard?.instantiateViewController(withIdentifier: "PostLocationNavControllerID") as! UINavigationController
+            self.present(controller, animated: true, completion: nil)
+        }
+        
+        // test if currently on map
         if let _ = StudentsOnTheMap.shared.onTheMap(uniqueKey: StudentsOnTheMap.shared.myUniqueKey) {
             
+            // student/user is currently on the map...present cancel/proceed alert
             presentCancelProceedAlertWithTitle("You currently have a location posted.",
-                                  message: "Do you wish to overwrite location ?") {
-                                    (action) in
-             
-                                    let controller = self.storyboard?.instantiateViewController(withIdentifier: "PostLocationNavControllerID") as! UINavigationController
-                                    
-                                    self.present(controller, animated: true, completion: nil)
+                                               message: "Do you wish to overwrite location ?") {
+                                                (action) in
+                                                
+                                                // post
+                                                postLocation()
             }
         }
+            // not on map..OK to invoke PostLocationVC
         else {
-            let controller = storyboard?.instantiateViewController(withIdentifier: "PostLocationNavControllerID") as! UINavigationController
-            
-            present(controller, animated: true, completion: nil)
+            postLocation()
         }
     }
     
@@ -179,20 +190,56 @@ extension ListViewController {
 
 extension ListViewController: UITableViewDataSource, UITableViewDelegate {
     
+    // row count
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return StudentsOnTheMap.shared.udacionCount
     }
     
+    // cell
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ListCellID", for: indexPath)
         
-        let student = StudentsOnTheMap.shared.udacionAtIndex(indexPath.row)
+        // get student. Set text to first/last name
+        let student = StudentsOnTheMap.shared.udacions[indexPath.row]
         cell.textLabel?.text = student.firstName + " " + student.lastName
         return cell
     }
     
+    // cell selected..open media
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+        // deselect
         tableView.deselectRow(at: indexPath, animated: true)
+        
+        // get student/url
+        let student = StudentsOnTheMap.shared.udacions[indexPath.row]
+        if let url = URL(string: student.mediaURL) {
+            
+            // open media...is possible
+            UIApplication.shared.open(url, options: [:]) {
+                (success) in
+                
+                // test for failure...show alert with message
+                if !success {
+                
+                    let alert = UIAlertController(title: "Unable to open",
+                                                  message: "Bad URL or possible security issue: \(url.absoluteString)",
+                                                  preferredStyle: .alert)
+                    let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                    alert.addAction(cancelAction)
+                    self.present(alert, animated: true, completion: nil)
+                }
+            }
+        }
+        // bad url...show alert
+        else {
+            
+            let alert = UIAlertController(title: "Unable to open",
+                                          message: "Bad or missing media URL info.",
+                                          preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            alert.addAction(cancelAction)
+            self.present(alert, animated: true, completion: nil)
+        }
     }
 }
