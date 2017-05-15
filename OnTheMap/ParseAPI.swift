@@ -16,11 +16,9 @@ class ParseAPI {
     // singleton
     static let shared = ParseAPI()
     private init() {}
-    
-    // store students
-    var students:[[String:AnyObject]]?
 }
 
+// Parse methods
 extension ParseAPI {
     
     // retieve student locations
@@ -72,6 +70,7 @@ extension ParseAPI {
                           Networking.ParamKeys.components: subcomponents,
                           Networking.ParamKeys.pathExtension: Paths.studentLocation] as [String:AnyObject]
         
+        // create networking object, run task using params...pass completion along
         let network = Networking()
         network.taskWithParams(parameters, completion: completion)
     }
@@ -106,29 +105,28 @@ extension ParseAPI {
                           Networking.ParamKeys.components: subcomponents,
                           Networking.ParamKeys.pathExtension: pathExtension] as [String:AnyObject]
         
+        // create networking object, run task using params...pass completion along
         let network = Networking()
         network.taskWithParams(parameters, completion: completion)
     }
 }
 
-extension ParseAPI {
-
-
-}
-
 // constants
 extension ParseAPI {
     
+    // subcomponents used to form URL
     fileprivate struct Subcomponents {
         static let scheme = "https"
         static let host = "parse.udacity.com"
         static let path = "/parse"
     }
     
+    // method paths
     fileprivate struct Paths {
         static let studentLocation = "/classes/StudentLocation"
     }
     
+    // Parse responses
     struct ResponseKeys {
         static let createdAt = "createdAt"
         static let updatedAt = "updatedAt"

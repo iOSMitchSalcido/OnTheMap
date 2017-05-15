@@ -7,12 +7,14 @@
 //
 /*
  About Student.swift:
- */
+ Data model for Udacity student (udacion). struct with properties defined in Parse and Udacity API
+*/
 
 import Foundation
 
 struct Student {
     
+    // properties defined in Parse API
     var objectId: String
     var uniqueKey: String
     var firstName: String
@@ -25,9 +27,10 @@ struct Student {
     var updatedAt: String
 
     // failable initializer
-    // ...only want the good students..the ones who's info is complete
+    // ...for the good students..the ones who's info is complete
     init?(_ student: [String:AnyObject]) {
         
+        // test for complete set of properties
         guard let objectId = student[Keys.objectId] as? String,
             let uniqueKey = student[Keys.uniqueKey] as? String,
             let firstName = student[Keys.firstName] as? String,
@@ -38,9 +41,12 @@ struct Student {
             let longitude = student[Keys.longitude] as? Double,
             let createdAt = student[Keys.createdAt] as? String,
             let updatedAt = student[Keys.updatedAt] as? String else {
+                
+                // incomplete student info....fail
                 return nil
         }
         
+        // complete student info...finish initializing properties
         self.objectId = objectId
         self.uniqueKey = uniqueKey
         self.firstName = firstName
@@ -68,8 +74,10 @@ struct Student {
     }
 }
 
+// constants
 extension Student {
     
+    // used throughout app to access student properties
     struct Keys {
         static let objectId = "objectId"
         static let uniqueKey = "uniqueKey"

@@ -7,6 +7,7 @@
 //
 /*
  About UdacityAPI.swift:
+ Interface for Udacity API. Handles posting session, retrieving student info, deleting a session.
  */
 
 import Foundation
@@ -102,23 +103,27 @@ extension UdacityAPI {
 // constants
 extension UdacityAPI {
     
+    // subcomponents used to form URL
     fileprivate struct Subcomponents {
         static let scheme = "https"
         static let host = "www.udacity.com" // need the www, otherwise won't "register" = 1
         static let path = "/api"
     }
     
+    // method paths
     fileprivate struct Paths {
         static let postSession = "/session"
         static let getPublicUserData = "/users"
     }
     
+    // keys used to access account info
     struct Account {
         static let account = "account"
         static let key = "key"
         static let registered = "registered"
     }
     
+    // Udacity response
     struct ResponseKeys {
         static let user = "user"
         static let firstName = "first_name"

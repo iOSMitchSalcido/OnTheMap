@@ -18,28 +18,18 @@ class StudentsOnTheMap {
     static let shared = StudentsOnTheMap()
     private init() {}
     
-    // cohort of Udacity students who are "On The Map"
+    // array "cohort" of Udacity students who are "On The Map"
     var udacions = [Student]()
     
-    // count of udacions
-    var udacionCount: Int {
-        get {
-            return self.udacions.count
-        }
-    }
-    
+    // store uniqueKey for user....retrieve during Udacity session post
     var myUniqueKey: String!
-}
-
-// helper functions
-extension StudentsOnTheMap {
     
-    // return student and index of student in udacions array...if exists. Otherwise return nil
-    func onTheMap(uniqueKey: String) -> (Student, Int)? {
+    // return student in udacions array...if exists. Otherwise return nil
+    func onTheMap(uniqueKey: String) -> Student? {
         
-        for (index, value) in udacions.enumerated() {
+        for (_, value) in udacions.enumerated() {
             if value.uniqueKey == uniqueKey {
-                return (value, index)
+                return value
             }
         }
         
@@ -79,7 +69,7 @@ extension StudentsOnTheMap {
             else if let students = params?[ParseAPI.ResponseKeys.results] as? [[String:AnyObject]] {
                 
                 // good parse..update udacions array with new cohort
-                StudentsOnTheMap.shared.newCohort(students)
+                self.newCohort(students)
                 
                 // done
                 completion(nil)
@@ -94,12 +84,13 @@ extension StudentsOnTheMap {
     }
 }
 
+// helper functions
 extension StudentsOnTheMap {
     
     /*
-     helper function. Retrieving students locations returns many results..lot's of duplicate students.
-     Assuming that students posted their location multiple times without removing old location.
-     This function parses a students array, removing duplicate locations and placing the latest location update.
+     Retrieving students locations returns many results..lot's of duplicate students.
+     Assuming that students somehow posted their location multiple times without removing old location.
+     This function parses a students array, removing duplicate students and placing the latest location update.
      */
     fileprivate func cleanupStudents(_ students: [Student]) -> [Student] {
         
@@ -171,9 +162,7 @@ extension StudentsOnTheMap {
             return date1.compare(date2) == ComparisonResult.orderedDescending
         }
         
-        // " Pick out students who's IDs match" contains all the students who are "on the map",
-        // sorted by students with most recent post/update at index 0, and oldest post/update
-        // at end index
+        // return array of udacions, sorted by updated posting.
         return onTheMapAndSortedByDate
     }
 }

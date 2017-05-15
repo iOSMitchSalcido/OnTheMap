@@ -7,18 +7,20 @@
 //
 /*
  About ListViewController.swift:
+ VC to preset a tableView that contains a list of students (udacions) who are currently "On the Map". Includes functionality
+ to refresh map, logout, and add/update location. Tapping cell wil present a URL of interest to the student.
  */
 
 import UIKit
 
 class ListViewController: UIViewController {
     
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
-    @IBOutlet weak var logoutBbi: UIBarButtonItem!
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var dropPinBbi: UIBarButtonItem!
-    @IBOutlet weak var refreshBbi: UIBarButtonItem!
-    
+    @IBOutlet weak var logoutBbi: UIBarButtonItem!      // logout bbi
+    @IBOutlet weak var tableView: UITableView!          // ref to tableView
+    @IBOutlet weak var dropPinBbi: UIBarButtonItem!     // bbi to post/update location
+    @IBOutlet weak var refreshBbi: UIBarButtonItem!     // bbi to refresh student locations
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!  // indicate network activity
+
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -34,11 +36,17 @@ class ListViewController: UIViewController {
     func updateMap() {
         
         /*
-         Invoke ParseAPI method to retrieve student locations
+         Function to update table. Retrieve student locations using ParseAPI and update tableView
+         Procedure to update map:
+         1) retrieve student locations
+         2) update udacion cohort with students who are "on the map"
+         3) update tableView
          */
         
+        // UI state to start update
         activateUIState(searching: true)
         
+        // 1) retrieve student locations
         ParseAPI.shared.studentLocations() {
             (params, error) in
             
@@ -50,14 +58,14 @@ class ListViewController: UIViewController {
                     self.showAlertForError(error)
                 }
             }
-            // test params
+            // 2) update udacion cohort with students who are "on the map"
             else if let params = params, let students = params["results"] as? [[String:AnyObject]] {
                 
                 // good params...create new cohort from retrieved students
                 StudentsOnTheMap.shared.newCohort(students)
             }
             
-            // update UI
+            // 3) update tableView
             DispatchQueue.main.async {
                 self.tableView.reloadData()
                 self.activateUIState(searching: false)
@@ -67,6 +75,10 @@ class ListViewController: UIViewController {
     
     @IBAction func logoutBbiPressed(_ sender: Any) {
         
+        /*
+         logout bbi pressed
+         Invoke alert with option to log out of app
+        */
         presentCancelProceedAlertWithTitle("Log out of 'On The Map' ?",
                                            message: nil) {
                                             (action) in
@@ -107,6 +119,7 @@ class ListViewController: UIViewController {
         }
     }
     
+    // update table with most recent students "on the map"
     @IBAction func refreshBbiPressed(_ sender: Any) {
         updateMap()
     }
@@ -114,19 +127,25 @@ class ListViewController: UIViewController {
 
 extension ListViewController {
     
-    // present an alertView, Cancel/Proceed
-    func presentCancelProceedAlertWithTitle(_ title: String, message: String?, completion: @escaping (UIAlertAction) -> Void) {
+    // present alert with cancel/proceed buttons
+    func presentCancelProceedAlertWithTitle(_ title: String, message: String? = nil, completion: @escaping (UIAlertAction) -> Void) {
         
+        // present alert. Completion is executed if "Proceed" button pressed
+        
+        // alert
         let alert = UIAlertController(title: title,
                                       message: message,
                                       preferredStyle: .alert)
         
+        // cancel action
         let cancelAction = UIAlertAction(title: "Cancel",
                                          style: .cancel,
                                          handler: nil)
         
+        // proceed action...execute completion passed in if pressed
         let proceedAction = UIAlertAction(title: "Proceed", style: .default, handler: completion)
         
+        // add actions, present
         alert.addAction(cancelAction)
         alert.addAction(proceedAction)
         present(alert, animated: true, completion: nil)
@@ -170,6 +189,7 @@ extension ListViewController {
         present(alert, animated: true, completion: nil)
     }
     
+    // set enable state of UI elements...used when searching, network activity
     func activateUIState(searching: Bool) {
         
         activityIndicator.isHidden = !searching
@@ -192,7 +212,7 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate {
     
     // row count
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return StudentsOnTheMap.shared.udacionCount
+        return StudentsOnTheMap.shared.udacions.count
     }
     
     // cell

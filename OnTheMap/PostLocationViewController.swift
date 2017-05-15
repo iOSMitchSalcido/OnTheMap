@@ -70,7 +70,7 @@ class PostLocationViewController: UIViewController {
             if let student = StudentsOnTheMap.shared.onTheMap(uniqueKey: StudentsOnTheMap.shared.myUniqueKey) {
                 
                 // already on map...update
-                updateLocationForStudent(student.0)
+                updateLocationForStudent(student)
             }
             else {
                 
@@ -145,7 +145,7 @@ extension PostLocationViewController {
                 // test for student already on map. If on map, then use existing mediaURL
                 // in textField. Otherwise nil textField and show placeholder.
                 if let student = StudentsOnTheMap.shared.onTheMap(uniqueKey: StudentsOnTheMap.shared.myUniqueKey) {
-                    self.textField.text = student.0.mediaURL
+                    self.textField.text = student.mediaURL
                     self.textField.placeholder = nil
                 }
                 else {
@@ -426,7 +426,6 @@ extension PostLocationViewController: UITextFieldDelegate {
 
 // mapView delegate functions
 extension PostLocationViewController: MKMapViewDelegate {
-    
     
     func mapViewDidFinishRenderingMap(_ mapView: MKMapView, fullyRendered: Bool) {
         

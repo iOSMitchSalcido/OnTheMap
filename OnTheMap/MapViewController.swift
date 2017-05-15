@@ -8,8 +8,9 @@
 /*
  About MapViewController.swift:
  VC to present a mapView with pins to identify Udacity students (udacions) who are currently "On the Map". Includes functionality
- to refresh map, logout, and add/update location.
- */
+ to refresh map, logout, and add/update location. Tapping pins wil present accessory with info button that can be used to
+ access a URL of interest to the student.
+*/
 
 import UIKit
 import MapKit
@@ -84,7 +85,11 @@ class MapViewController: UIViewController {
     // logout bbi pressed
     @IBAction func logoutBbiPressed(_ sender: Any) {
         
-        // present cancel/proceed alert
+        /*
+         logout bbi pressed
+         Invoke alert with option to log out of app
+         */
+        
         presentCancelProceedAlertWithTitle("Log out of 'On The Map' ?",
                                            message: nil) {
                                             (action) in
@@ -247,7 +252,7 @@ extension MapViewController: MKMapViewDelegate {
         activateUIState(searching: false)
     }
     
-    // return annotationView
+    // annotationView
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         
         // deque view
@@ -268,6 +273,7 @@ extension MapViewController: MKMapViewDelegate {
         return pinView
     }
     
+    // accessory button tapped
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         
         // retrieve subtitle, URL from subtitle
