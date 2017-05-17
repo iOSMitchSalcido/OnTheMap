@@ -30,6 +30,8 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        print("frame: \(view.frame)")
     }
 
     override func viewWillAppear(_ animated: Bool) {
