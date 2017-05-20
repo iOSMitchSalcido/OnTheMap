@@ -56,7 +56,7 @@ class StudentsOnTheMap {
     // update cohort array, fire completion
     func updateCohort(completion: @escaping (NetworkErrors?) -> Void) {
         
-        ParseAPI.shared.studentLocations() {
+        ParseAPI().studentLocations() {
             (params, error) in
             
             // test error

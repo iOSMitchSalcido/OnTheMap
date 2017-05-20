@@ -15,14 +15,7 @@
 
 import Foundation
 
-class UdacityAPI {
-    
-    // singleton
-    static let shared = UdacityAPI()
-    private init() {}
-}
-
-extension UdacityAPI {
+struct UdacityAPI {
     
     // post session
     func postSessionForUser(_ user:String, password:String, completion:@escaping ([String:AnyObject]?, NetworkErrors?) -> Void) {
@@ -59,7 +52,7 @@ extension UdacityAPI {
         
         /*
          Retrieve public user data for a student who is "on the map"
-        */
+         */
         
         // create subcomponents
         let subcomponents = [Networking.ParamKeys.host: Subcomponents.host,

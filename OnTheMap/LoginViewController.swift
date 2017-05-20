@@ -67,7 +67,7 @@ class LoginViewController: UIViewController {
         activateUILoginState(loggingIn: true)
         
         // invoke API function to post session
-        UdacityAPI.shared.postSessionForUser(usernameTextField.text!, password: passwordTextField.text!) {
+        UdacityAPI().postSessionForUser(usernameTextField.text!, password: passwordTextField.text!) {
             (params, error) in
             
             // test error

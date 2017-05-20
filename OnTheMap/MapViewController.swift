@@ -52,7 +52,7 @@ class MapViewController: UIViewController {
         activateUIState(searching: true)
         
         // 1) retrieve student locations
-        ParseAPI.shared.studentLocations() {
+        ParseAPI().studentLocations() {
             (params, error) in
             
             // test error
@@ -95,7 +95,7 @@ class MapViewController: UIViewController {
                                             (action) in
                                             
                                             // completion..delete session and dismiss VC
-                                            UdacityAPI.shared.deleteSession()
+                                            UdacityAPI().deleteSession()
                                             self.dismiss(animated: true, completion: nil)
         }
     }

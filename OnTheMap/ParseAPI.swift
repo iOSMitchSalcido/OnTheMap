@@ -15,22 +15,14 @@
 
 import Foundation
 
-class ParseAPI {
-    
-    // singleton
-    static let shared = ParseAPI()
-    private init() {}
-}
-
-// Parse methods
-extension ParseAPI {
+struct ParseAPI {
     
     // retieve student locations
     func studentLocations(completion:@escaping ([String:AnyObject]?, NetworkErrors?) -> Void) {
-
+        
         /*
          function to retrieve locations of students who are "on the map"
-        */
+         */
         
         // HTTPHeaderFields
         let httpHeaderFields = ["X-Parse-Application-Id": "QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr",
@@ -56,7 +48,7 @@ extension ParseAPI {
         
         /*
          function to post a new location for a student
-        */
+         */
         
         // HTTPHeaderFields
         let httpHeaderFields = ["X-Parse-Application-Id": "QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr",
@@ -93,7 +85,7 @@ extension ParseAPI {
         
         /*
          function to update the location of a student who is "on the map"
-        */
+         */
         
         // HTTPHeaderFields
         let httpHeaderFields = ["X-Parse-Application-Id": "QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr",

@@ -47,7 +47,7 @@ class ListViewController: UIViewController {
         activateUIState(searching: true)
         
         // 1) retrieve student locations
-        ParseAPI.shared.studentLocations() {
+        ParseAPI().studentLocations() {
             (params, error) in
             
             // test error

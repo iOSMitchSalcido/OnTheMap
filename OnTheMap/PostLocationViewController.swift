@@ -190,7 +190,7 @@ extension PostLocationViewController {
         activateUIState(searching: true)
         
         // 1) get student public user info..need first/last name info
-        UdacityAPI.shared.getPublicUserData(userID: StudentsOnTheMap.shared.myUniqueKey) {
+        UdacityAPI().getPublicUserData(userID: StudentsOnTheMap.shared.myUniqueKey) {
             (params, error) in
             
             // test error
@@ -217,7 +217,7 @@ extension PostLocationViewController {
                 student.latitude = (self.placemark?.location?.coordinate.latitude)!
                 
                 // 3) POST using ParseAPI
-                ParseAPI.shared.postStudentLocation(student) {
+                ParseAPI().postStudentLocation(student) {
                     (params, error) in
                     
                     // test error
@@ -283,7 +283,7 @@ extension PostLocationViewController {
         student.latitude = (placemark?.location?.coordinate.latitude)!
         
         // 2) PUT function using ParseAPI to update location
-        ParseAPI.shared.putStudentLocation(student) {
+        ParseAPI().putStudentLocation(student) {
             (params, error) in
             
             // test error, show alert if error
