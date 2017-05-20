@@ -216,6 +216,22 @@
                                 <action selector="logoutBbiPressed:" destination="Xej-Xe-GNe" id="Iwq-bs-SeF"/>
                             </connections>
                         </barButtonItem>
+                        <view key="titleView" contentMode="scaleToFill" id="Sj1-dp-Gap">
+                            <rect key="frame" x="87" y="5.5" width="128" height="33"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mapListTitleView" translatesAutoresizingMaskIntoConstraints="NO" id="Qds-tb-Xzq">
+                                    <rect key="frame" x="0.0" y="0.0" width="128" height="33"/>
+                                </imageView>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstItem="Qds-tb-Xzq" firstAttribute="top" secondItem="Sj1-dp-Gap" secondAttribute="top" id="02M-b2-yt2"/>
+                                <constraint firstAttribute="bottom" secondItem="Qds-tb-Xzq" secondAttribute="bottom" id="Q8J-tC-hJ6"/>
+                                <constraint firstItem="Qds-tb-Xzq" firstAttribute="leading" secondItem="Sj1-dp-Gap" secondAttribute="leading" id="RTd-se-gSx"/>
+                                <constraint firstAttribute="trailing" secondItem="Qds-tb-Xzq" secondAttribute="trailing" id="vnl-fo-pRF"/>
+                            </constraints>
+                        </view>
                         <rightBarButtonItems>
                             <barButtonItem systemItem="refresh" id="qFK-bq-iee">
                                 <connections>
@@ -338,11 +354,28 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="hct-XV-S26">
+                        <nil key="title"/>
                         <barButtonItem key="leftBarButtonItem" systemItem="reply" id="UCI-Bz-quv">
                             <connections>
                                 <action selector="logoutBbiPressed:" destination="jBn-Ba-0Yd" id="PhE-l6-Voe"/>
                             </connections>
                         </barButtonItem>
+                        <view key="titleView" contentMode="scaleToFill" id="QA8-Mj-gHj">
+                            <rect key="frame" x="87" y="5.5" width="128" height="33"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mapListTitleView" translatesAutoresizingMaskIntoConstraints="NO" id="4Me-A5-KvD">
+                                    <rect key="frame" x="0.0" y="0.0" width="128" height="33"/>
+                                </imageView>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstItem="4Me-A5-KvD" firstAttribute="top" secondItem="QA8-Mj-gHj" secondAttribute="top" id="60M-DK-8hf"/>
+                                <constraint firstAttribute="bottom" secondItem="4Me-A5-KvD" secondAttribute="bottom" id="DrV-Zj-Fg3"/>
+                                <constraint firstAttribute="trailing" secondItem="4Me-A5-KvD" secondAttribute="trailing" id="Pba-HL-eQA"/>
+                                <constraint firstItem="4Me-A5-KvD" firstAttribute="leading" secondItem="QA8-Mj-gHj" secondAttribute="leading" id="SPE-0H-DTg"/>
+                            </constraints>
+                        </view>
                         <rightBarButtonItems>
                             <barButtonItem systemItem="refresh" id="JM2-ym-zXq">
                                 <connections>
@@ -472,6 +505,23 @@
                         </connections>
                     </view>
                     <navigationItem key="navigationItem" id="Gy0-El-Oqo">
+                        <nil key="title"/>
+                        <view key="titleView" contentMode="scaleToFill" id="G1C-CR-PgJ">
+                            <rect key="frame" x="96" y="5.5" width="128" height="33"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="postLocationTitleView" translatesAutoresizingMaskIntoConstraints="NO" id="GBD-uC-Yo7">
+                                    <rect key="frame" x="0.0" y="0.0" width="128" height="33"/>
+                                </imageView>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstAttribute="bottom" secondItem="GBD-uC-Yo7" secondAttribute="bottom" id="2wN-EN-Tcq"/>
+                                <constraint firstItem="GBD-uC-Yo7" firstAttribute="top" secondItem="G1C-CR-PgJ" secondAttribute="top" id="MgH-fi-QPZ"/>
+                                <constraint firstItem="GBD-uC-Yo7" firstAttribute="leading" secondItem="G1C-CR-PgJ" secondAttribute="leading" id="UXD-tE-BY6"/>
+                                <constraint firstAttribute="trailing" secondItem="GBD-uC-Yo7" secondAttribute="trailing" id="gb3-ap-3ce"/>
+                            </constraints>
+                        </view>
                         <barButtonItem key="rightBarButtonItem" systemItem="cancel" id="D2I-HR-rJQ">
                             <connections>
                                 <action selector="cancelBbiPressed:" destination="nt5-gg-y1d" id="97q-7B-jo3"/>
@@ -522,5 +572,7 @@
         <image name="icon_mapview-selected" width="75" height="50"/>
         <image name="icon_pin" width="24" height="24"/>
         <image name="icon_world" width="52" height="67"/>
+        <image name="mapListTitleView" width="128" height="33"/>
+        <image name="postLocationTitleView" width="128" height="33"/>
     </resources>
 </document>

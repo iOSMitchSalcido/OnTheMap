@@ -5,6 +5,10 @@
 //  Created by Online Training on 4/29/17.
 //  Copyright © 2017 Mitch Salcido. All rights reserved.
 //
+/*
+ About PortraitNavController.swift:
+ NC with orientation property overridden to support only portrait
+*/
 
 import UIKit
 
@@ -17,7 +21,5 @@ class PortraitNavController: UINavigationController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
     }
 }
