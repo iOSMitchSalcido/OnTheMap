@@ -235,7 +235,7 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate {
         let student = StudentsOnTheMap.shared.udacions[indexPath.row]
         if let url = URL(string: student.mediaURL) {
             
-            // open media...is possible
+            // open media...if possible
             UIApplication.shared.open(url, options: [:]) {
                 (success) in
                 

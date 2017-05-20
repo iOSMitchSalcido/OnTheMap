@@ -7,7 +7,8 @@
 //
 /*
  About StudentsOnTheMap.swift:
- Model/Store class to maintain array of Students (udacions), and provide access to udacions property
+ Model/Store class to maintain array of Students (udacions), and provide access to udacions property. Intended for use
+ as a singleton to maintain data store retrieved from Parse/Udacity API's
 */
 
 import Foundation

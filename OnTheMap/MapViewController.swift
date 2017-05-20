@@ -279,7 +279,7 @@ extension MapViewController: MKMapViewDelegate {
         // retrieve subtitle, URL from subtitle
         if let subtitle = view.annotation?.subtitle as? String, let url = URL(string: subtitle) {
             
-            // open media...is possible
+            // open media...if possible
             UIApplication.shared.open(url, options: [:]) {
                 (success) in
                 
