@@ -8,6 +8,9 @@
 /*
  About UdacityAPI.swift:
  Interface for Udacity API. Handles posting session, retrieving student info, deleting a session.
+ 
+ API function create a paramaters dictionionary which contains data required to build a URL, Request, and
+ invoke a dataTask. The parameters are then used to call taskWithParams in Networking struct.
  */
 
 import Foundation
@@ -37,7 +40,7 @@ extension UdacityAPI {
         // create subcomponents
         let subcomponents = [Networking.ParamKeys.host: Subcomponents.host,
                              Networking.ParamKeys.path: Subcomponents.path,
-                             Networking.ParamKeys.scheme: Subcomponents.scheme] as [String:AnyObject]
+                             Networking.ParamKeys.scheme: Networking.ParamValues.secureScheme]
         
         // place in dictionary
         let parameters = [Networking.ParamKeys.httpHeaderField: httpHeaderFields,
@@ -54,10 +57,14 @@ extension UdacityAPI {
     // get public data for a user
     func getPublicUserData(userID: String, completion:@escaping ([String:AnyObject]?, NetworkErrors?) -> Void) {
         
+        /*
+         Retrieve public user data for a student who is "on the map"
+        */
+        
         // create subcomponents
         let subcomponents = [Networking.ParamKeys.host: Subcomponents.host,
                              Networking.ParamKeys.path: Subcomponents.path,
-                             Networking.ParamKeys.scheme: Subcomponents.scheme]
+                             Networking.ParamKeys.scheme: Networking.ParamValues.secureScheme]
         
         // path extension
         let pathExtension = Paths.getPublicUserData + "/" + userID
@@ -105,7 +112,6 @@ extension UdacityAPI {
     
     // subcomponents used to form URL
     fileprivate struct Subcomponents {
-        static let scheme = "https"
         static let host = "www.udacity.com" // need the www, otherwise won't "register" = 1
         static let path = "/api"
     }

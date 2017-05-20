@@ -21,7 +21,7 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var passwordTextField: UITextField!      // textField for password
     @IBOutlet weak var loginButton: UIButton!               // button for login
     @IBOutlet weak var stackView: UIStackView!              // ref to stackView. Used for dimming view indicating network activity
-    @IBOutlet weak var activityViewIndicator: UIActivityIndicatorView!  // USed for indicating network activity
+    @IBOutlet weak var activityViewIndicator: UIActivityIndicatorView!  // Used for indicating network activity
     
     // portrait orientation
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
@@ -30,8 +30,6 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        print("frame: \(view.frame)")
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -61,7 +59,7 @@ class LoginViewController: UIViewController {
          The user/password are retirieved from the textFields and passed into the
          UdacityAPI.
          
-         Of the params returned from the post, "uniqueKey" is checked. If good, then invoke
+         Of the params returned from the post, "uniqueKey" and "registered" are checked. If good, then invoke
          tabBar controller containing main app views, map and list of students on the map...
          */
         
@@ -82,12 +80,12 @@ class LoginViewController: UIViewController {
             }
             // test for good POST session (valid key and registered = true)
             else if let account = params?[UdacityAPI.Account.account] as? [String:AnyObject],
-                let key = account[UdacityAPI.Account.key] as? String,
+                let uniqueKey = account[UdacityAPI.Account.key] as? String,
                 let registered = account[UdacityAPI.Account.registered] as? Bool,
                 registered == true {
                 
                 // assign to uniqueKey
-                StudentsOnTheMap.shared.myUniqueKey = key
+                StudentsOnTheMap.shared.myUniqueKey = uniqueKey
                 
                 // load tabVC
                 DispatchQueue.main.async {
@@ -98,7 +96,7 @@ class LoginViewController: UIViewController {
             // bad registration error
             else {
                 
-                // error during registration/session post, but successful params created
+                // error during registration/session post
                 let error = NetworkErrors.operatorError("Unregistered user ! Please verify credentials and try again")
                 DispatchQueue.main.async {
                     self.showAlertForError(error)

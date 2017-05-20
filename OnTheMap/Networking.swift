@@ -15,33 +15,32 @@ import Foundation
 
 // errors enum
 enum NetworkErrors: Swift.Error {
-    case networkError(String)   // problems in URLSessionDataTask
+    case networkError(String)   // problems in URLSessionDataTask, networking errors
     case operatorError(String)  // issues such as typos, bad username/password, etc
-    case generalError(String)   // misc error, unknown, etc
+    case generalError(String)   // misc/unknown error, etc
 }
 
 struct Networking {
     
-    // Constants: for sifting out dictionaries in params passed into taskWithParams
-    struct ParamKeys {
-        static let pathExtension = "pathExtension"
-        static let httpBody = "httpBody"
-        static let components = "components"
-        static let host = "host"
-        static let scheme = "scheme"
-        static let path = "path"
-        static let httpHeaderField = "httpHeaderField"
-        static let httpMethod = "httpMethod"
-    }
-}
-
-extension Networking {
-    
     // data task
     func taskWithParams(_ params:[String:AnyObject], completion:@escaping ([String:AnyObject]?, NetworkErrors?) -> Void) {
         
+        /*
+         Function to peform a URL Session data task.
+         This functions takes in a dictionary of params (created in API structs that call this func), and a completion
+         closure.
+         
+         From the params, a URL is created, from which a URL Request is created. params also contain additional
+         configration data to complete configuration of the URLRequest (method, httpHeaderFields, body).
+         
+         Lastly, a dataTask is created and invoked using the URL request. Error checking is performed in the task
+         completion.
+         */
+        
         // retrieve url
         guard let url = urlForParams(params) else {
+            
+            // unable to create URL. Invoke completion with error.
             completion(nil, NetworkErrors.operatorError("Unable to create valid URL."))
             return
         }
@@ -49,19 +48,19 @@ extension Networking {
         // create/build request
         var request = URLRequest(url: url)
         
-        // HTTP Method
+        // HTTP Method. Retrieve from params.
         if let method = params[Networking.ParamKeys.httpMethod] as? String {
             request.httpMethod = method
         }
         
-        // HTTP Header Field(s)
+        // HTTP Header Field(s). Retrieve from params.
         if let httpHeaderField = params[Networking.ParamKeys.httpHeaderField] as? [String:AnyObject] {
             for (key, value) in httpHeaderField {
                 request.addValue(value as! String, forHTTPHeaderField: key)
             }
         }
         
-        // HTTPBody
+        // HTTPBody. Retrieve from params
         if let body = params[Networking.ParamKeys.httpBody] {
             do {
                 let postData = try JSONSerialization.data(withJSONObject: body)
@@ -73,12 +72,13 @@ extension Networking {
             }
         }
         
-        // create data task
+        // create data task with request
         let task = URLSession.shared.dataTask(with: request) {
             (data, response, error) in
             
             // test error
             guard error == nil else {
+                // Error during task. Fire completion with error
                 completion(nil, NetworkErrors.networkError("Error in data task."))
                 return
             }
@@ -88,11 +88,14 @@ extension Networking {
                 
                 switch statusCode {
                 case 200...299:
+                    // good status code
                     break
                 case 403:
+                    // bad creds
                     completion(nil, NetworkErrors.operatorError("Invalid credentials. Check username/password"))
                     return
                 default:
+                    // bad status code
                     completion(nil, NetworkErrors.networkError("Bad status code returned. non-2xx"))
                     return
                 }
@@ -100,6 +103,8 @@ extension Networking {
             
             // test valid data
             guard var data = data else {
+                
+                // bad data returned. Fire completion with error.
                 completion(nil, NetworkErrors.networkError("No data returned from data task."))
                 return
             }
@@ -109,6 +114,8 @@ extension Networking {
              Perform in two try's. First try tests for JSON using data. If error thrown, then try again, only remove
              first five characters per Udacity API spec...might be Udacity data
              */
+            
+            // JSON object
             let json:[String:AnyObject]!
             do {
                 // first pass test
@@ -123,10 +130,14 @@ extension Networking {
                     json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String:AnyObject]
                 }
                 catch {
+                    
+                    // bad JSON conversion. Fire completion with error
                     completion(nil, NetworkErrors.networkError("Unable to convert data."))
                     return
                 }
             }
+            
+            // good JSON. Fire completion using JSON object
             completion(json, nil)
         }
         
@@ -139,16 +150,22 @@ extension Networking {
         // make a copy..will be pulling items out
         var params = params
         
+        /*
+         params contains data not implemented in URL creation. Items not implemented are removed from dictionary.
+         The remaining params contain info used for URL creation: path extension and api components
+        */
+        
         // remove extensions, httpBody, and apiComponents
         let extensions = params.removeValue(forKey: Networking.ParamKeys.pathExtension) as? String
         let _ = params.removeValue(forKey: Networking.ParamKeys.httpBody) // not needed for URL creation
         let _ = params.removeValue(forKey: Networking.ParamKeys.httpHeaderField) // not needed
         let _ = params.removeValue(forKey: Networking.ParamKeys.httpMethod) // not needed
+        
+        // test api components...needed for URL creation
         guard let apiComponents = params.removeValue(forKey: Networking.ParamKeys.components) else {
-            // !! apiComponents are required !!
             return nil
         }
-        
+
         //.. params now only contains queryItems
         
         // create components
@@ -165,5 +182,25 @@ extension Networking {
         }
         
         return components.url
+    }
+}
+
+extension Networking {
+    
+    // Constants keys for sifting out dictionaries in params passed into taskWithParams
+    struct ParamKeys {
+        static let pathExtension = "pathExtension"
+        static let httpBody = "httpBody"
+        static let components = "components"
+        static let host = "host"
+        static let scheme = "scheme"
+        static let path = "path"
+        static let httpHeaderField = "httpHeaderField"
+        static let httpMethod = "httpMethod"
+    }
+    
+    // Constants values
+    struct ParamValues {
+        static let secureScheme = "https"   // secure scheme
     }
 }

@@ -117,10 +117,10 @@
 			children = (
 				862A42F41EA441D20084B42B /* AppDelegate.swift */,
 				86FE31CA1EA57C3500C129FD /* Networking.swift */,
-				86EE68941EA9A6210003F110 /* Student.swift */,
-				86DB42B51EAA37DD00BADEC1 /* StudentsOnTheMap.swift */,
 				86FE31CC1EA5884E00C129FD /* UdacityAPI.swift */,
 				86F88A2A1EA793A700164A25 /* ParseAPI.swift */,
+				86EE68941EA9A6210003F110 /* Student.swift */,
+				86DB42B51EAA37DD00BADEC1 /* StudentsOnTheMap.swift */,
 				862A42F61EA441D20084B42B /* LoginViewController.swift */,
 				86DBD4381EA456790007F8F4 /* MapViewController.swift */,
 				86DBD43C1EA459F00007F8F4 /* ListViewController.swift */,

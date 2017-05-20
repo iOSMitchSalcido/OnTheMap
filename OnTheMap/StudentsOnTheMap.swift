@@ -21,7 +21,7 @@ class StudentsOnTheMap {
     // array "cohort" of Udacity students who are "On The Map"
     var udacions = [Student]()
     
-    // store uniqueKey for user....retrieve during Udacity session post
+    // store uniqueKey for user....retrieved during Udacity session post
     var myUniqueKey: String!
     
     // return student in udacions array...if exists. Otherwise return nil

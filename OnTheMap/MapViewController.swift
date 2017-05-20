@@ -106,7 +106,7 @@ class MapViewController: UIViewController {
         /*
          Invoke process to add/update map location. Function tests to see if student currently
          has a location posted. If so, then an alert is presented to allow the user to cancel out.
-         If no currentl location or proceed pressed, the invoke PostLocationVC to allow student to
+         If no currentl location or proceed pressed, then invoke PostLocationVC to allow student to
          continue process of posting location.
         */
         
