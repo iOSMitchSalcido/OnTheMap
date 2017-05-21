@@ -78,10 +78,14 @@ class ListViewController: UIViewController {
         /*
          logout bbi pressed
          Invoke alert with option to log out of app
-        */
+         */
+        
         presentCancelProceedAlertWithTitle("Log out of 'On The Map' ?",
                                            message: nil) {
                                             (action) in
+                                            
+                                            // completion..delete session and dismiss VC
+                                            UdacityAPI().deleteSession() // 170520: include per reviewer comment
                                             self.dismiss(animated: true, completion: nil)
         }
     }
