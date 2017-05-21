@@ -16,6 +16,7 @@
 		862A430A1EA441D20084B42B /* OnTheMapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 862A43091EA441D20084B42B /* OnTheMapTests.swift */; };
 		862A43151EA441D20084B42B /* OnTheMapUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 862A43141EA441D20084B42B /* OnTheMapUITests.swift */; };
 		864214A31EAC17B900155365 /* PostLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864214A21EAC17B900155365 /* PostLocationViewController.swift */; };
+		86D98EA01ED111E700EA064E /* UIViewController-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86D98E9F1ED111E700EA064E /* UIViewController-Extensions.swift */; };
 		86DB42B61EAA37DD00BADEC1 /* StudentsOnTheMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86DB42B51EAA37DD00BADEC1 /* StudentsOnTheMap.swift */; };
 		86DBD4391EA456790007F8F4 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86DBD4381EA456790007F8F4 /* MapViewController.swift */; };
 		86DBD43D1EA459F00007F8F4 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86DBD43C1EA459F00007F8F4 /* ListViewController.swift */; };
@@ -58,6 +59,7 @@
 		862A43141EA441D20084B42B /* OnTheMapUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnTheMapUITests.swift; sourceTree = "<group>"; };
 		862A43161EA441D20084B42B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		864214A21EAC17B900155365 /* PostLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostLocationViewController.swift; sourceTree = "<group>"; };
+		86D98E9F1ED111E700EA064E /* UIViewController-Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController-Extensions.swift"; sourceTree = "<group>"; };
 		86DB42B51EAA37DD00BADEC1 /* StudentsOnTheMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StudentsOnTheMap.swift; sourceTree = "<group>"; };
 		86DBD4381EA456790007F8F4 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		86DBD43C1EA459F00007F8F4 /* ListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
@@ -127,6 +129,7 @@
 				864214A21EAC17B900155365 /* PostLocationViewController.swift */,
 				862A42F81EA441D20084B42B /* Main.storyboard */,
 				862419D41EB53CD6003B93BA /* PortraitNavController.swift */,
+				86D98E9F1ED111E700EA064E /* UIViewController-Extensions.swift */,
 				862A42FB1EA441D20084B42B /* Assets.xcassets */,
 				862A42FD1EA441D20084B42B /* LaunchScreen.storyboard */,
 				862A43001EA441D20084B42B /* Info.plist */,
@@ -289,6 +292,7 @@
 			files = (
 				86DB42B61EAA37DD00BADEC1 /* StudentsOnTheMap.swift in Sources */,
 				862A42F71EA441D20084B42B /* LoginViewController.swift in Sources */,
+				86D98EA01ED111E700EA064E /* UIViewController-Extensions.swift in Sources */,
 				86FE31CB1EA57C3500C129FD /* Networking.swift in Sources */,
 				86F88A2B1EA793A700164A25 /* ParseAPI.swift in Sources */,
 				862419D51EB53CD6003B93BA /* PortraitNavController.swift in Sources */,

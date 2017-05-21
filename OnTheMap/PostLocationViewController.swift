@@ -314,48 +314,6 @@ extension PostLocationViewController {
     }
 }
 
-// Alert/Error handling functions
-extension PostLocationViewController {
-    
-    // helper function for displaying alert
-    func showAlertForError(_ error: NetworkErrors) {
-        
-        /*
-         Handle creation and presentation of an alertController. Function receives a NetworkError enum
-         and filters for approproate title/message based on enum case and associated value.
-         */
-        
-        // title and message for alert
-        var alertTitle: String!
-        var alertMessage: String!
-        
-        // filter out title/message from error
-        switch error {
-        case .networkError(let value):
-            alertTitle = "Network Error"
-            alertMessage = value
-        case .operatorError(let value):
-            alertTitle = "User Error"
-            alertMessage = value
-        case .generalError(let value):
-            alertTitle = "Misc/unknown Error"
-            alertMessage = value
-        }
-        
-        // create alert and cancel action
-        let alert = UIAlertController(title: alertTitle,
-                                      message: alertMessage,
-                                      preferredStyle: .alert)
-        let cancelAction = UIAlertAction(title: "Cancel",
-                                         style: .cancel,
-                                         handler: nil)
-        
-        // add action, present alert
-        alert.addAction(cancelAction)
-        present(alert, animated: true, completion: nil)
-    }
-}
-
 // helper functions
 extension PostLocationViewController {
     
