@@ -158,7 +158,7 @@ extension LoginViewController {
     }
     
     // keyboard is about to show
-    func keyboardWillShow(_ notification: Notification) {
+    @objc func keyboardWillShow(_ notification: Notification) {
         
         // test for keyboard shift. Shift up if not currently shifted
         if view.superview?.frame.origin.y == 0.0 {
@@ -172,7 +172,7 @@ extension LoginViewController {
     }
     
     // keyboard is about to hide
-    func keyboardWillHide(_ notification: Notification) {
+    @objc func keyboardWillHide(_ notification: Notification) {
         
         // test for keyboard shift. Shift back down if currently shifted
         if view.superview?.frame.origin.y != 0.0 {

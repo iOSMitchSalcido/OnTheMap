@@ -119,7 +119,7 @@ struct Networking {
             let json:[String:AnyObject]!
             do {
                 // first pass test
-                json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String:AnyObject]
+                json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String:AnyObject]
             }
             catch {
                 // failed first pass
@@ -127,7 +127,7 @@ struct Networking {
                     // try again, but remove first five characters per Udacity API spec
                     let range = Range(5..<data.count)
                     data = data.subdata(in: range)
-                    json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String:AnyObject]
+                    json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String:AnyObject]
                 }
                 catch {
                     
@@ -201,6 +201,7 @@ extension Networking {
     
     // Constants values
     struct ParamValues {
+        static let unsecureScheme = "http"  // unsecure scheme
         static let secureScheme = "https"   // secure scheme
     }
 }
